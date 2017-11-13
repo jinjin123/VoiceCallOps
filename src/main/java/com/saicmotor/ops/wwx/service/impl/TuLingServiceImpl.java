@@ -43,6 +43,7 @@ public class TuLingServiceImpl implements TuLingService{
 
             log.debug("POST {}\nbody:{}", tuling_api_url, body);
             ResponseEntity<Map> response = restTemplate.postForEntity(tuling_api_url, body, Map.class);
+
             log.debug("Response:{}\n{}",response.getStatusCodeValue(), response.getBody());
             return response.getBody();
         }catch(Exception e){
