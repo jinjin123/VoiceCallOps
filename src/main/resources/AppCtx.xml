@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:redisson="http://redisson.org/schema/redisson"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://redisson.org/schema/redisson http://redisson.org/schema/redisson/redisson.xsd">
 
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven />
@@ -46,4 +47,74 @@
     </bean>
     <bean id="xmlMapper" class="com.fasterxml.jackson.dataformat.xml.XmlMapper">
     </bean>
+
+    <bean id="bizExecutor" class="com.saicmotor.ops.wwx.biz.BizExecutor">
+        <property name="handlers">
+            <map>
+                <entry key="duty">
+                    <bean class="com.saicmotor.ops.wwx.biz.DutyHandler"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+
+    <!-- ==================定义连接管理器============================ -->
+    <bean id="httpClientConnectionManager" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" destroy-method="close">
+        <constructor-arg index="0" value="60" />
+        <constructor-arg index="1" value="SECONDS"/>
+        <!-- 最大连接数 -->
+        <property name="maxTotal" value="${httpClient.maxTotal}" />
+        <!-- 设置每个主机地址的并发数 -->
+        <property name="defaultMaxPerRoute" value="${httpClient.defaultMaxPerRoute}" />
+        <!-- 验证连接是否可用 -->
+        <property name="validateAfterInactivity" value="10000"/>
+    </bean>
+    <!-- httpclient对象构建器 -->
+    <bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder">
+        <property name="connectionManager" ref="httpClientConnectionManager" />
+    </bean>
+    <!-- 定义Httpclient对象 -->
+    <bean id="httpClient" class="org.apache.http.impl.client.CloseableHttpClient" factory-bean="httpClientBuilder" factory-method="build" scope="prototype">
+    </bean>
+    <bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig.Builder">
+        <!-- 创建连接的最长时间 -->
+        <property name="connectTimeout" value="${httpClient.connectTimeout}"/>
+        <!-- 从连接池中获取到连接的最长时间 -->
+        <property name="connectionRequestTimeout" value="${httpClient.connectionRequestTimeout}"/>
+        <!-- 数据传输的最长时间 -->
+        <property name="socketTimeout" value="${httpClient.socketTimeout}"/>
+    </bean>
+    <!-- 定义请求参数 -->
+    <bean id="requestConfig" class="org.apache.http.client.config.RequestConfig" factory-bean="requestConfigBuilder" factory-method="build">
+    </bean>
+
+    <!-- =======================处理freemarker模板=============================== -->
+    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape" value-ref="fmXmlEscape"/>
+            </map>
+        </property>
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="classic_compatible">true</prop>
+                <prop key="whitespace_stripping">true</prop>
+                <prop key="template_update_delay">60</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="default_encoding">utf-8</prop>
+                <prop key="url_escaping_charset">utf-8</prop>
+                <prop key="date_format">dd-MM-yyyy</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="datetime_format">dd-MM-yyyy HH:mm:ss</prop>
+                <prop key="number_format">0.##</prop>
+                <prop key="boolean_format">true,false</prop>
+                <prop key="whitespace_stripping">true</prop>
+                <prop key="tag_syntax">auto_detect</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
 </beans>

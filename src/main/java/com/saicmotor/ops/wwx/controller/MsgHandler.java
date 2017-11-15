@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import com.saicmotor.ops.wwx.service.BaiduYuYinService;
-import com.saicmotor.ops.wwx.service.SearchService;
+import com.saicmotor.ops.wwx.service.DutyPlanService;
 import com.saicmotor.ops.wwx.service.TuLingService;
 import com.saicmotor.ops.wwx.service.impl.utils.MsgHandlerUtil;
 
@@ -19,11 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
-import javax.xml.bind.DatatypeConverter;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -35,12 +33,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -80,7 +72,7 @@ public class MsgHandler {
     @Autowired
     private BaiduYuYinService baiduYuYinService;
     @Autowired
-    private SearchService searchService;
+    private DutyPlanService dutyPlanService;
     @Autowired
     private MsgHandlerUtil msgHandlerUtil;
     private WXBizMsgCrypt wxcpt;
@@ -279,7 +271,7 @@ public class MsgHandler {
                         "   <MsgType><![CDATA[text]]></MsgType>\n" +
                         "   <Content><![CDATA[%s]]></Content>\n" +
                         "</xml>";
-        tpl = String.format(tpl , msg.get("FromUserName"), msg.get("ToUserName"), System.currentTimeMillis()/1000, "≤‚ ‘Ω◊∂Œ£¨ƒø«∞÷ª÷ß≥÷Œƒ±æœ˚œ¢");
+        tpl = String.format(tpl , msg.get("FromUserName"), msg.get("ToUserName"), System.currentTimeMillis()/1000, "ÊµãËØïÈò∂ÊÆµÔºåÁõÆÂâçÂè™ÊîØÊåÅÊñáÊú¨Ê∂àÊÅØ");
         String data = wxcpt.EncryptMsg(tpl, String.valueOf(System.currentTimeMillis()/1000), String.valueOf(random.nextInt(99999999)));
         return new ResponseEntity<byte[]>(data.getBytes(), HttpStatus.OK);
     }
@@ -295,7 +287,7 @@ public class MsgHandler {
 //        	for (int i=0;i<voiceResultArray.length;i++) {
 //        		voiceResult = voiceResult + voiceResultArray[i];
 //        	}
-        	System.out.println("∞Ÿ∂»”Ô“ÙΩ·π˚ «: " + ss);
+        	System.out.println("ÁôæÂ∫¶ËØ≠Èü≥ÁªìÊûúÊòØ: " + ss);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -312,23 +304,23 @@ public class MsgHandler {
 		String downloadDir = classPath + "/temp";
 		
         try {
-            // Õ≥“ª◊ ‘¥
+            // Áªü‰∏ÄËµÑÊ∫ê
             URL url = new URL(urlPath);
-            // ¡¨Ω”¿‡µƒ∏∏¿‡£¨≥ÈœÛ¿‡
+            // ËøûÊé•Á±ªÁöÑÁà∂Á±ªÔºåÊäΩË±°Á±ª
             URLConnection urlConnection = url.openConnection();
-            // httpµƒ¡¨Ω”¿‡
+            // httpÁöÑËøûÊé•Á±ª
             HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
-            // …Ë∂®«Î«Ûµƒ∑Ω∑®£¨ƒ¨»œ «GET
+            // ËÆæÂÆöËØ∑Ê±ÇÁöÑÊñπÊ≥ïÔºåÈªòËÆ§ÊòØGET
             httpURLConnection.setRequestMethod("POST");
-            // …Ë÷√◊÷∑˚±‡¬Î
+            // ËÆæÁΩÆÂ≠óÁ¨¶ÁºñÁ†Å
             httpURLConnection.setRequestProperty("Charset", "UTF-8");
-            // ¥Úø™µΩ¥À URL “˝”√µƒ◊ ‘¥µƒÕ®–≈¡¥Ω”£®»Áπ˚…–Œ¥Ω®¡¢’‚—˘µƒ¡¨Ω”£©°£
+            // ÊâìÂºÄÂà∞Ê≠§ URL ÂºïÁî®ÁöÑËµÑÊ∫êÁöÑÈÄö‰ø°ÈìæÊé•ÔºàÂ¶ÇÊûúÂ∞öÊú™Âª∫Á´ãËøôÊ†∑ÁöÑËøûÊé•Ôºâ„ÄÇ
             httpURLConnection.connect();
 
-            // Œƒº˛¥Û–°
+            // Êñá‰ª∂Â§ßÂ∞è
             int fileLength = httpURLConnection.getContentLength();
 
-            // Œƒº˛√˚
+            // Êñá‰ª∂Âêç
 //            String filePathUrl = httpURLConnection.getURL().getFile();
 //            String fileFullName = filePathUrl.substring(filePathUrl.lastIndexOf(File.separatorChar) + 1);
             String fileName = "media" + System.currentTimeMillis();
@@ -349,8 +341,8 @@ public class MsgHandler {
             while ((size = bin.read(buf)) != -1) {
                 len += size;
                 out.write(buf, 0, size);
-                // ¥Ú”°œ¬‘ÿ∞Ÿ∑÷±»
-                // System.out.println("œ¬‘ÿ¡À-------> " + len * 1000 / fileLength +
+                // ÊâìÂç∞‰∏ãËΩΩÁôæÂàÜÊØî
+                // System.out.println("‰∏ãËΩΩ‰∫Ü-------> " + len * 1000 / fileLength +
                 // "%\n");
             }
             bin.close();
