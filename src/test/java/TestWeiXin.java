@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.saicmotor.ops.wwx.service.WWXService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -17,6 +18,8 @@ public class TestWeiXin {
 
     @Autowired
     private XmlMapper xmlMapper;
+    @Autowired
+    private WWXService wwxService;
 
     @Test
     public void test1() throws Exception{
@@ -30,6 +33,16 @@ public class TestWeiXin {
                 "   <AgentID>1</AgentID>\n" +
                 "</xml>";
 
+    }
+
+    @Test
+    public void testGetToken() throws Exception{
+        wwxService.getAccessToken();
+    }
+
+    @Test
+    public void downloadMedia() throws Exception{
+        wwxService.downloadMediaObject("test");
     }
 
 }

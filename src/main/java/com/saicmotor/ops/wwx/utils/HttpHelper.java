@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class RestUtil {
-    private static Logger log = LoggerFactory.getLogger(RestUtil.class);
+public class HttpHelper {
+    private static Logger log = LoggerFactory.getLogger(HttpHelper.class);
 
     @Autowired
     private CloseableHttpClient httpClient;
@@ -102,5 +102,28 @@ public class RestUtil {
         return result;
     }
 
+    public Map<String,Object> getJson(String url, Map<String,Object> querys) throws Exception{
+        Map result = request("GET", url, querys, null, null);
+        byte[] body = (byte[])result.get("body");
+        if( body!=null && body.length>0 ){
+            Object json = jsonMapper.readValue(body, Object.class);
+            result.put("body", json);
+        }
+        return result;
+    }
+
+    public Map<String,Object> getBodyAsByteArray(String url, Map<String,Object> querys) throws Exception{
+        return request("GET", url, querys, null,null);
+    }
+
+    public Map<String,Object> postJson(String url, Map<String,Object> body) throws Exception{
+        Map result = request("POST-JSON", url, null, null, body);
+        byte[] tmp = (byte[])result.get("body");
+        if( tmp!=null && tmp.length>0 ){
+            Object json = jsonMapper.readValue(tmp, Object.class);
+            result.put("body", json);
+        }
+        return result;
+    }
 
 }

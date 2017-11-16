@@ -1,7 +1,5 @@
 package com.saicmotor.ops.wwx.biz;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.saicmotor.ops.wwx.service.DutyPlanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +14,10 @@ public class DutyHandler extends BizHandler {
     private DutyPlanService dutyPlanService;
 
 
-    public Map<String,Object> getDutyPlan(Map<String,Object> params) throws Exception{
+    public Map<String,Object> getDutyPlan(String... params) throws Exception{
         int days ;
         try{
-            days = Integer.parseInt(params.get("days").toString());
+            days = Integer.parseInt(params[0]);
             days = (days>=1 && days<=7)?days:3;
         }catch(Throwable t){
             days = 3;

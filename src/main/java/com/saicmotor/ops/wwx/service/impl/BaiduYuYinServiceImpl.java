@@ -2,6 +2,7 @@ package com.saicmotor.ops.wwx.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saicmotor.ops.wwx.service.BaiduYuYinService;
+import com.saicmotor.ops.wwx.utils.HttpHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.DatatypeConverter;
@@ -37,6 +39,10 @@ public class BaiduYuYinServiceImpl implements BaiduYuYinService{
     private ObjectMapper objectMapper;
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private HttpHelper httpHelper;
+
     @Value("${baidu.api.format}")
     private String baidu_api_format;
     @Value("${baidu.api.rate}")
@@ -53,6 +59,30 @@ public class BaiduYuYinServiceImpl implements BaiduYuYinService{
     private String baidu_api_callback;
     @Value("${baidu.api.url}")
     private String baidu_api_url;
+
+    public String voice2txt(String format, String rate, byte[] data) throws Exception{
+        try{
+            Map<String,Object> body = new HashMap<String, Object>();
+            body.put("format", format);
+            body.put("rate", rate);
+            body.put("channel", baidu_api_channel);
+            body.put("cuid", baidu_api_cuid);
+            body.put("token", baidu_api_token);
+            body.put("lan", baidu_api_lan);
+            body.put("len", data.length);
+            body.put("speech", DatatypeConverter.printBase64Binary(data));
+
+            Map<String,Object> result = httpHelper.postJson(baidu_api_url, body);
+            if( (Integer)((Map)result.get("body")).get("err_no") == 0 ){
+                return (String)((List)((Map)result.get("body")).get("result")).get(0);
+            }else{
+                return null;
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+    }
 
 
     public Map<String, Object> getVoiceRecognition(File mediaFile) throws Exception {

@@ -10,4 +10,6 @@ public interface BaiduYuYinService {
 
     Map<String,Object> getVoiceRecognition(File mediaFile) throws Exception;
 
+    String voice2txt(String format, String rate, byte[] data) throws Exception;
+
 }

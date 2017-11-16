@@ -1,7 +1,7 @@
 package com.saicmotor.ops.wwx.service.impl;
 
 import com.saicmotor.ops.wwx.service.DutyPlanService;
-import com.saicmotor.ops.wwx.utils.RestUtil;
+import com.saicmotor.ops.wwx.utils.HttpHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class DutyPlanServiceImpl implements DutyPlanService {
     private String ySchedueUrl ;
 
     @Autowired
-    private RestUtil restUtil;
+    private HttpHelper restUtil;
     
 
     public List<Map> getRangePlan(Date st, Date ed) throws Exception {

@@ -1,7 +1,7 @@
 import com.saicmotor.ops.wwx.biz.BizExecutor;
 import com.saicmotor.ops.wwx.biz.BizHandler;
 import com.saicmotor.ops.wwx.service.DutyPlanService;
-import com.saicmotor.ops.wwx.utils.RestUtil;
+import com.saicmotor.ops.wwx.utils.HttpHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -13,6 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/AppCtx.xml")
@@ -22,7 +24,7 @@ public class TestBizHandler {
     @Autowired
     private BizExecutor executor;
     @Autowired
-    private RestUtil restUtil;
+    private HttpHelper restUtil;
     @Autowired
     private DutyPlanService dutyPlanService;
 
@@ -40,12 +42,20 @@ public class TestBizHandler {
 
     @Test
     public void T2() throws Exception{
-        Map<String,Object> cmd = new HashMap<String,Object>();
-        Map<String,Object> params = new HashMap<String,Object>();
-        params.put("days", 7);
-        cmd.put("catalog", "duty");
-        cmd.put("action", "getDutyPlan");
-        cmd.put("params", params);
+        Pattern pattern = Pattern.compile("^ACT\\.(\\w+)\\.(\\w+)\\(([\\w+\\s*,]*)\\)$");
+        String cmd = "ACT.duty.getDutyPlan(7)";
+        //String cmd = "ACT.duty.getDutyPlan(1)";
+        Matcher matcher = pattern.matcher(cmd);
+        if( matcher.matches() ){
+            for(int i=0;i<=matcher.groupCount();i++){
+                System.out.println("---->"+matcher.group(i));
+            }
+        }
+        String params = matcher.group(3);
+        String[] p = params.split(",");
+        for(String s : p){
+            System.out.println("--==="+s+"===");
+        }
 
         executor.exec(cmd);
     }

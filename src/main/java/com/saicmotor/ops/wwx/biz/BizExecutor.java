@@ -10,9 +10,13 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BizExecutor {
     private static Logger log = LoggerFactory.getLogger(BizExecutor.class);
+    private static String cmdPattern = "^ACT\\.(\\w+)\\.(\\w+)\\(([\\w+\\s*,]*)\\)$";
+
     @Autowired
     private FreeMarkerConfigurer freemarker;
 
@@ -26,18 +30,40 @@ public class BizExecutor {
         this.handlers = handlers;
     }
 
-    public Map<String,Object> exec(Map<String,Object> cmd) throws Exception{
+
+    public boolean accept(String cmd ){
+        if( cmd==null || cmd.trim().length()==0 ) return false;
+        Pattern pattern = Pattern.compile(cmdPattern);
+        return pattern.matcher(cmd).matches();
+    }
+
+
+    public Map<String,Object> exec(String cmd) throws Exception{
         long st = System.currentTimeMillis();
         Map<String,Object> result = null;
 
         try{
             log.info("===> {}", cmd);
-            BizHandler biz = handlers.get(cmd.get("catalog"));
-            Method mth = biz.getClass().getMethod((String)cmd.get("action"), Map.class);
-            Map<String,Object> params = (Map<String,Object>)cmd.get("params");
-            log.debug("call {}.{}({})", biz.getClass(),mth.getName(),params);
+            Pattern pattern = Pattern.compile(cmdPattern);
+            Matcher matcher = pattern.matcher(cmd.trim());
+            matcher.matches();
 
-            result = (Map)mth.invoke(biz, params);
+            BizHandler biz = handlers.get(matcher.group(1));
+            Method mth = biz.getClass().getMethod(matcher.group(2), String[].class);
+
+            String[] params = null;
+            String tmp = matcher.group(3).trim();
+            if( tmp==null || tmp.length()==0 ){
+                params = new String[0];
+            }else{
+                params = tmp.split(",");
+                for(int i=0;i<params.length;i++){
+                    params[i] = params[i].trim().length()==0?null:params[i].trim();
+                }
+            }
+            log.debug("call {}.{}({})", biz.getClass(),mth.getName(), params);
+
+            result = (Map)mth.invoke(biz, new Object[]{params});
             if(result.containsKey("msgFtl")){
                 Template tpl = freemarker.getConfiguration().getTemplate((String)result.get("msgFtl"));
                 StringWriter out = new StringWriter();
