@@ -57,6 +57,9 @@
                 <entry key="duty">
                     <bean class="com.saicmotor.ops.wwx.biz.DutyHandler"/>
                 </entry>
+                <entry key="alarm">
+                    <bean class="com.saicmotor.ops.wwx.biz.AlarmHandler"/>
+                </entry>
             </map>
         </property>
     </bean>
