@@ -20,8 +20,24 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Value("${yunwei.alarm.url}")
     private String yAlarmUrl ;
+    
     @Value("${yunwei.alarmDetail.url}")
     private String yAlarmDetailUrl ;
+    
+    @Value("${yunwei.alarmOrigin.url}")
+    private String yAlarmOriginUrl ;
+    
+    @Value("${yunwei.alarmIndicator.url}")
+    private String yAlarmIndicatorUrl ;
+    
+    @Value("${yunwei.alarmStatus.url}")
+    private String yAlarmStatusUrl ;
+    
+    @Value("${yunwei.alarmModule.url}")
+    private String yAlarmModuleUrl ;
+    
+    @Value("${yunwei.alarmLevel.url}")
+    private String yAlarmLevelUrl ;
 
     @Autowired
     private HttpHelper restUtil;
@@ -55,15 +71,83 @@ public class AlarmServiceImpl implements AlarmService {
         return resultMap;
     }
     
+    public List<Map> getAlarmLevel() throws Exception {
+        String url = this.yAlarmLevelUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> data = (List)((Map)result.get("body")).get("data");
+        List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+        	Map<String,Object> tmp = new HashMap<String,Object>();
+        	tmp.put("id", map.get("id"));
+        	tmp.put("name", (String)map.get("name"));
+        	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    
+    public List<Map> getAlarmOrigin() throws Exception {
+        String url = this.yAlarmOriginUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> data = (List)((Map)result.get("body")).get("data");
+        List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+        	Map<String,Object> tmp = new HashMap<String,Object>();
+        	tmp.put("id", map.get("id"));
+        	tmp.put("name", (String)map.get("name"));
+        	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    
+    public List<Map> getAlarmIndicator() throws Exception {
+        String url = this.yAlarmIndicatorUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> data = (List)((Map)result.get("body")).get("data");
+        List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+        	Map<String,Object> tmp = new HashMap<String,Object>();
+        	tmp.put("id", map.get("id"));
+        	tmp.put("name", (String)map.get("name"));
+        	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    
+    public List<Map> getAlarmStatus() throws Exception {
+        String url = this.yAlarmStatusUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> data = (List)((Map)result.get("body")).get("data");
+        List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+        	Map<String,Object> tmp = new HashMap<String,Object>();
+        	tmp.put("id", map.get("id"));
+        	tmp.put("name", (String)map.get("name"));
+        	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    
+    public List<Map> getAlarmModule() throws Exception {
+        String url = this.yAlarmModuleUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> data = (List)((Map)result.get("body")).get("data");
+        List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+        	Map<String,Object> tmp = new HashMap<String,Object>();
+        	tmp.put("id", map.get("id"));
+        	tmp.put("name", (String)map.get("name"));
+        	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    
     
     private List<Map> refactor(List<Map> data) throws Exception{
     	List<Map> resultList = new ArrayList<Map>();
-        Map<String,Object> tmp = new HashMap<String,Object>();
-        if (data == null || data.size()==0) {
-        	return new ArrayList<Map>();
-        }
         for (Map map : data) {
+        	Map<String,Object> tmp = new HashMap<String,Object>();
         	tmp.put("id", map.get("id"));
+        	tmp.put("level", map.get("level"));
         	tmp.put("level_des", (String)map.get("level_des"));
         	tmp.put("indicator_des", (String)map.get("indicator_des"));
         	tmp.put("ip", (String)map.get("ip"));

@@ -27,5 +27,40 @@ public interface AlarmService {
 	 * @throws Exception
 	 */
 	Map<String,Object> getAlarmDetail(int id) throws Exception;
+	
+	/**
+	 * 获取告警级别
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map> getAlarmLevel() throws Exception;
 
+	/**
+	 * 获取告警来源
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map> getAlarmOrigin() throws Exception;
+	
+	/**
+	 * 获取告警指标
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map> getAlarmIndicator() throws Exception;
+	
+	/**
+	 * 获取告警状态
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map> getAlarmStatus() throws Exception;
+	
+	/**
+	 * 获取一级业务信息
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map> getAlarmModule() throws Exception;
 }
+

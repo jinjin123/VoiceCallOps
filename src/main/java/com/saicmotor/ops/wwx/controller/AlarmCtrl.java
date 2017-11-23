@@ -33,4 +33,94 @@ public class AlarmCtrl {
             return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @RequestMapping("/alarmDetail")
+    public ResponseEntity<Map> alarmDetail(int id){
+        try{
+            Map<String,Object> alarmDetail = alarmService.getAlarmDetail(id);
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", alarmDetail);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/alarmLevel")
+    public ResponseEntity<Map> alarmLevel(){
+        try{
+            List<Map> alarmLevel = alarmService.getAlarmLevel();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", alarmLevel);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/alarmOrigin")
+    public ResponseEntity<Map> alarmOrigin(){
+        try{
+            List<Map> alarmOrigin = alarmService.getAlarmOrigin();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", alarmOrigin);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/alarmIndicator")
+    public ResponseEntity<Map> alarmIndicator(){
+        try{
+            List<Map> alarmIndicator = alarmService.getAlarmIndicator();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", alarmIndicator);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/alarmStatus")
+    public ResponseEntity<Map> alarmStatus(){
+        try{
+            List<Map> alarmStatus = alarmService.getAlarmStatus();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", alarmStatus);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/alarmModule")
+    public ResponseEntity<Map> alarmModule(){
+        try{
+            List<Map> alarmModule = alarmService.getAlarmModule();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", alarmModule);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
