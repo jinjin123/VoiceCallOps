@@ -19,7 +19,7 @@ public interface AlarmService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<Map> getAlarmList(String start, String length, String origin, String status, String module_id_one, String level) throws Exception;
+	Map<String,Object> getAlarmList(String start, String length, String origin, String status, String module_id_one, String level) throws Exception;
 	
 	/**
 	 * 查询告警详情

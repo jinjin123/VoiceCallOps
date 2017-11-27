@@ -22,7 +22,8 @@ public class AlarmHandler extends BizHandler {
     	String module_id_one = params[4];
     	String level = params[5];
 
-        List<Map> alarms = alarmService.getAlarmList(start, length, origin, status, module_id_one, level);
+    	Map<String,Object> alarmsMap = alarmService.getAlarmList(start, length, origin, status, module_id_one, level);
+        List<Map> alarms = (List) alarmsMap.get("resultList");
 
         Map<String,Object> result = new HashMap<String,Object>();
         result.put("msgType", "text");

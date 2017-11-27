@@ -43,11 +43,16 @@ public class AlarmServiceImpl implements AlarmService {
     private HttpHelper restUtil;
     
 
-    public List<Map> getAlarmList(String start, String length, String origin, String status, String module_id_one, String level) throws Exception {
+    public Map<String,Object> getAlarmList(String start, String length, String origin, String status, String module_id_one, String level) throws Exception {
     	
         String url = this.yAlarmUrl + "start=" + start + "&length=" + length + "&level=" + level + "&origin=" + origin + "&status=" + status + "&module_id_one=" + module_id_one;
         Map<String,Object> result = restUtil.getJson(url);
-        return refactor( (List)((Map)result.get("body")).get("data") );
+        int total = (Integer)((Map)result.get("body")).get("total");
+        List<Map> resultList = refactor( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("total", total);
+        resultMap.put("resultList", resultList);
+        return resultMap;
     }
 
     public Map<String,Object> getAlarmDetail(int id) throws Exception {

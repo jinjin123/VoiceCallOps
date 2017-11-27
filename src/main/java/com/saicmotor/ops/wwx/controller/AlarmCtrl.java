@@ -22,7 +22,7 @@ public class AlarmCtrl {
     @RequestMapping("/alarmQuery")
     public ResponseEntity<Map> alarmQuery(String start, String length, String origin, String status, String module_id_one, String level){
         try{
-            List<Map> alarms = alarmService.getAlarmList(start, length, origin, status, module_id_one, level);
+        	Map<String,Object> alarms = alarmService.getAlarmList(start, length, origin, status, module_id_one, level);
 
             Map<String,Object> result = new HashMap<String,Object>();
             result.put("success", true);
