@@ -141,6 +141,14 @@ public class MsgHandler {
             log.error(t.getMessage(), t);
         }
 
+        if( content!=null && content.equals(answer.get("text")) ){
+            if ( "voice".equals(msg.get("MsgType")) ){
+                answer.put("text", "臣没有听清楚，请陛下再说一遍");
+            }else{
+                answer.put("text", "臣无法做到，请明示。");
+            }
+        }
+
         Random random = new Random(System.currentTimeMillis());
         String tpl =
                 "<xml>\n" +
