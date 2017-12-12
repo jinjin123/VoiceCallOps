@@ -16,6 +16,7 @@ public interface AlarmService {
 	 * @param origin
 	 * @param status
 	 * @param module_id_one
+	 * @param inner_ip
 	 * @return
 	 * @throws Exception
 	 */

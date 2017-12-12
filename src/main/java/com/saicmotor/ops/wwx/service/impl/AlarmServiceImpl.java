@@ -45,7 +45,8 @@ public class AlarmServiceImpl implements AlarmService {
 
     public Map<String,Object> getAlarmList(String start, String length, String origin, String status, String module_id_one, String level) throws Exception {
     	
-        String url = this.yAlarmUrl + "start=" + start + "&length=" + length + "&level=" + level + "&origin=" + origin + "&status=" + status + "&module_id_one=" + module_id_one;
+        String url = this.yAlarmUrl + "start=" + start + "&length=" + length + "&level=" + level + "&origin=" + origin +
+        		"&status=" + status + "&module_id_one=" + module_id_one;
         Map<String,Object> result = restUtil.getJson(url);
         int total = (Integer)((Map)result.get("body")).get("total");
         List<Map> resultList = refactor( (List)((Map)result.get("body")).get("data") );
@@ -73,6 +74,20 @@ public class AlarmServiceImpl implements AlarmService {
     	resultMap.put("create_time", (String)tmp.get("create_time"));
     	resultMap.put("content", (String)tmp.get("content"));
     	resultMap.put("notify_type_des", (String)tmp.get("notify_type_des"));
+    	
+    	resultMap.put("origin", tmp.get("origin"));
+    	resultMap.put("status", tmp.get("status"));
+    	resultMap.put("indicator", tmp.get("indicator"));
+    	resultMap.put("level", tmp.get("level"));
+    	resultMap.put("notify_type", tmp.get("notify_type"));
+    	resultMap.put("module_id", tmp.get("module_id"));
+    	resultMap.put("id", tmp.get("id"));
+    	
+    	resultMap.put("recovery_time", (String)tmp.get("recovery_time"));
+    	resultMap.put("ip", (String)tmp.get("ip"));
+    	resultMap.put("origin_des", (String)tmp.get("origin_des"));
+    	resultMap.put("modify_time", (String)tmp.get("modify_time"));
+    	
         return resultMap;
     }
     
