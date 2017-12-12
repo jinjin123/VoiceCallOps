@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -44,15 +45,27 @@ public class CmdbServiceImpl implements CmdbService {
     @Value("${yunwei.cmdbNetdevices.url}")
     private String yCmdbNetdevicesUrl ;
     
+    @Value("${yunwei.cmdbIdcexports.url}")
+    private String yCmdbIdcexportsUrl ;
+    @Value("${yunwei.cmdbIdclines.url}")
+    private String yCmdbIdclinesUrl ;
+    
+    @Value("${yunwei.cmdbServerMonitor.url}")
+    private String yCmdbServerMonitorUrl ;
+    @Value("${yunwei.cmdbNetdevicesMonitor.url}")
+    private String yCmdbNetdevicesMonitorUrl ;
+    @Value("${yunwei.cmdbIdcMonitor.url}")
+    private String yCmdbIdcMonitorUrl ;
+    
     @Autowired
     private HttpHelper restUtil;
     
 
-    public Map<String,Object> getCmdbServerList(String page, String length, String principal, String idc, String module_id, String logic_area, String state) 
+    public Map<String,Object> getCmdbServerList(String page, String length, String principal, String idc, String module_id, String logic_area, String state, String inner_ip) 
     			throws Exception {
     	
         String url = this.yCmdbServerUrl + "page=" + page + "&length=" + length + "&principal=" + principal + "&idc=" + idc + "&logic_area=" + 
-        				logic_area + "&state=" + state + "&module_id=" + module_id;
+        				logic_area + "&state=" + state + "&module_id=" + module_id + "&inner_ip=" + inner_ip;
         Map<String,Object> result = restUtil.getJson(url);
         int total = (Integer)((Map)result.get("body")).get("total");
         List<Map> resultList = refactor( (List)((Map)result.get("body")).get("data") );
@@ -194,9 +207,9 @@ public class CmdbServiceImpl implements CmdbService {
         return resultList;
     }
     
-    public Map<String,Object> getCmdbNetdevicesList(String page, String length, String netdev_idc, String netdev_type, String netdev_func, String netdev_pro, String netdev_model) throws Exception {
+    public Map<String,Object> getCmdbNetdevicesList(String page, String length, String netdev_idc, String netdev_type, String netdev_func, String netdev_pro, String netdev_model, String netdev_admin_ip) throws Exception {
         String url = this.yCmdbNetdevicesUrl + "page=" + page + "&length=" + length + "&netdev_idc=" + netdev_idc + "&netdev_type=" + netdev_type + "&netdev_func=" + 
-        		netdev_func + "&netdev_pro=" + netdev_pro + "&netdev_model=" + netdev_model;
+        		netdev_func + "&netdev_pro=" + netdev_pro + "&netdev_model=" + netdev_model + "&netdev_admin_ip=" + netdev_admin_ip;
 		Map<String,Object> result = restUtil.getJson(url);
 		int total = (Integer)((Map)result.get("body")).get("total");
 		List<Map> resultList = refactorNetdevices( (List)((Map)result.get("body")).get("data") );
@@ -226,6 +239,66 @@ public class CmdbServiceImpl implements CmdbService {
         return resultList;
     }
 
+
+    public Map<String,Object> getCmdbIdcexportsList(String page, String length) throws Exception {
+        String url = this.yCmdbIdcexportsUrl + "page=" + page + "&length=" + length;
+		Map<String,Object> result = restUtil.getJson(url);
+		int total = (Integer)((Map)result.get("body")).get("total");
+		List<Map> resultList = refactorIdcexports( (List)((Map)result.get("body")).get("data") );
+		Map<String,Object> resultMap = new HashMap<String,Object>();
+		resultMap.put("total", total);
+		resultMap.put("resultList", resultList);
+		return resultMap;
+    }
+    
+    public Map<String,Object> getCmdbIdclinesList(String page, String length) throws Exception {
+        String url = this.yCmdbIdclinesUrl + "page=" + page + "&length=" + length;
+		Map<String,Object> result = restUtil.getJson(url);
+		int total = (Integer)((Map)result.get("body")).get("total");
+		List<Map> resultList = refactorIdclines( (List)((Map)result.get("body")).get("data") );
+		Map<String,Object> resultMap = new HashMap<String,Object>();
+		resultMap.put("total", total);
+		resultMap.put("resultList", resultList);
+		return resultMap;
+    }
+    
+    public List<Map> getCmdbServerMonitor(String begin,String end ,int minuteInterval ,String ip) throws Exception {
+    	// 转换成时间戳
+    	SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	Long beginTime = format.parse(begin).getTime();
+    	Long endTime = format.parse(end).getTime();
+    	
+    	String url = this.yCmdbServerMonitorUrl + "beginTime=" + beginTime + "&endTime=" + endTime + "&minuteInterval=" + minuteInterval + "&ip=" + ip;
+		Map<String,Object> result = restUtil.getJson(url);
+		List<Map> resultList = refactorMonitor( (List)((Map)result.get("body")).get("data") );
+		return resultList;
+    }
+    
+    public List<Map> getCmdbNetdevicesMonitor(String begin,String end ,int minuteInterval ,String ip) throws Exception {
+    	// 转换成时间戳
+    	SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	Long beginTime = format.parse(begin).getTime();
+    	Long endTime = format.parse(end).getTime();
+    	
+        String url = this.yCmdbNetdevicesMonitorUrl + "beginTime=" + beginTime + "&endTime=" + endTime + 
+        		"&minuteInterval=" + minuteInterval + "&ip=" + ip;
+		Map<String,Object> result = restUtil.getJson(url);
+		List<Map> resultList = refactorMonitor( (List)((Map)result.get("body")).get("data") );
+		return resultList;
+    }
+    
+    public Map getCmdbIdcMonitor(String begin,String end ,int interval ,String id) throws Exception {
+    	// 转换成时间戳
+    	SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	Long beginTime = format.parse(begin).getTime();
+    	Long endTime = format.parse(end).getTime();
+    	
+    	String url = this.yCmdbIdcMonitorUrl + "beginTime=" + beginTime + "&endTime=" + endTime + "&interval=" + interval + "&id=" + id;
+		Map<String,Object> result = restUtil.getJson(url);
+		Map resultMap = refactorIdcMonitor( (Map)((Map)result.get("body")).get("data") );
+		return resultMap;
+    }
+    
     private List<Map> refactorNetdevices(List<Map> data) throws Exception{
     	List<Map> resultList = new ArrayList<Map>();
         for (Map map : data) {
@@ -240,4 +313,68 @@ public class CmdbServiceImpl implements CmdbService {
         return resultList;
     }
     
+    private List<Map> refactorIdcexports(List<Map> data) throws Exception{
+    	List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+        	Map<String,Object> tmp = new HashMap<String,Object>();
+        	tmp.put("id", map.get("id"));
+        	tmp.put("line_operator", (String)map.get("line_operator"));
+        	tmp.put("export_device_ip", (String)map.get("export_device_ip"));
+        	tmp.put("line_tech_available_speed", (String)map.get("line_tech_available_speed"));
+        	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    
+    private List<Map> refactorIdclines(List<Map> data) throws Exception{
+    	List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+        	Map<String,Object> tmp = new HashMap<String,Object>();
+        	tmp.put("id", map.get("id"));
+        	tmp.put("spe_line_name", (String)map.get("spe_line_name"));
+        	tmp.put("spe_line_id", (String)map.get("spe_line_id"));
+        	tmp.put("line_operator", (String)map.get("line_operator"));
+        	tmp.put("spe_line_speed", (String)map.get("spe_line_speed"));
+        	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    
+    private List<Map> refactorMonitor(List<Map> data) throws Exception{
+    	List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+        	Map<String,Object> tmp = new HashMap<String,Object>();
+        	tmp.put("humanizedValue", map.get("humanizedValue"));
+        	tmp.put("value", map.get("value"));
+        	tmp.put("time", map.get("time"));
+        	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    
+    private Map refactorIdcMonitor(Map data) throws Exception{
+    	Map idcMonitorMap = new HashMap();
+    	List<Map> seriesList = new ArrayList();
+    	for(Map seriesMap: (List<Map>)data.get("series")) {
+    		Map seriesReturnMap = new HashMap();
+    		List dataList = new ArrayList();
+    		for(Object value:(List)seriesMap.get("data")) {
+    			dataList.add(value);
+    		}
+    		seriesReturnMap.put("data", dataList);
+    		seriesReturnMap.put("name", seriesMap.get("name"));
+    		seriesReturnMap.put("unit", seriesMap.get("unit"));
+    		
+    		seriesList.add(seriesReturnMap);
+    	}
+    	idcMonitorMap.put("series", seriesList);
+    	
+    	List<String> timeList = new ArrayList(); 
+    	for(String time: (List<String>)data.get("time")){
+    		timeList.add(time);
+    	}
+    	idcMonitorMap.put("x_time", timeList);
+    	
+        return idcMonitorMap;
+    }
 }

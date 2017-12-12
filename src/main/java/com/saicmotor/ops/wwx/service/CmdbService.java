@@ -17,10 +17,11 @@ public interface CmdbService {
 	 * @param module_id
 	 * @param logic_area
 	 * @param state
+	 * @param inner_ip
 	 * @return
 	 * @throws Exception
 	 */
-	Map<String,Object> getCmdbServerList(String page, String length, String principal, String idc, String module_id, String logic_area, String state) throws Exception;
+	Map<String,Object> getCmdbServerList(String page, String length, String principal, String idc, String module_id, String logic_area, String state,String inner_ip) throws Exception;
 	
 	/**
 	 * 获取业务关联选择项API
@@ -102,9 +103,62 @@ public interface CmdbService {
 	 * @param netdev_func
 	 * @param netdev_pro
 	 * @param netdev_model
+	 * @param netdev_admin_ip
 	 * @return
 	 * @throws Exception
 	 */
-	Map<String,Object> getCmdbNetdevicesList(String page, String length, String netdev_idc, String netdev_type, String netdev_func, String netdev_pro, String netdev_model) throws Exception;
+	Map<String,Object> getCmdbNetdevicesList(String page, String length, String netdev_idc, String netdev_type, String netdev_func, String netdev_pro, String netdev_model, String netdev_admin_ip) throws Exception;
+	
+	/**
+	 * 网络出口列表API
+	 * @param page
+	 * @param length
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getCmdbIdcexportsList(String page, String length) throws Exception;
+	
+	/**
+	 * IDC专线列表API
+	 * @param page
+	 * @param length
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getCmdbIdclinesList(String page, String length) throws Exception;
+	
+	/**
+	 * 服务器cpu监控数据查询
+	 * @param begin
+	 * @param end
+	 * @param minuteInterval
+	 * @param ip
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map> getCmdbServerMonitor(String begin,String end ,int minuteInterval ,String ip) throws Exception;
+	
+	/**
+	 * 网路设备cpu监控数据查询
+	 * @param begin
+	 * @param end
+	 * @param minuteInterval
+	 * @param ip
+	 * @param devPort
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map> getCmdbNetdevicesMonitor(String begin,String end ,int minuteInterval ,String ip) throws Exception;
+	
+	/**
+	 * IDC监控数据查询
+	 * @param begin
+	 * @param end
+	 * @param minuteInterval
+	 * @param ip
+	 * @return
+	 * @throws Exception
+	 */
+	Map getCmdbIdcMonitor(String begin,String end ,int interval ,String id) throws Exception;
 }
 

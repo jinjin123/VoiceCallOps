@@ -21,9 +21,9 @@ public class CmdbCtrl {
     private CmdbService cmdbService;
 
     @RequestMapping("/cmdbServer")
-    public ResponseEntity<Map> cmdbServerList(String page, String length, String principal, String idc, String module_id, String logic_area, String state){
+    public ResponseEntity<Map> cmdbServerList(String page, String length, String principal, String idc, String module_id, String logic_area, String state,String inner_ip){
         try{
-        	Map<String,Object> cmdbServers = cmdbService.getCmdbServerList(page, length, principal, idc, module_id, logic_area, state);
+        	Map<String,Object> cmdbServers = cmdbService.getCmdbServerList(page, length, principal, idc, module_id, logic_area, state, inner_ip);
 
             Map<String,Object> result = new HashMap<String,Object>();
             result.put("success", true);
@@ -186,13 +186,88 @@ public class CmdbCtrl {
     }
     
     @RequestMapping("/cmdbNetdevices")
-    public ResponseEntity<Map> cmdbNetdevicesList(String page, String length, String netdev_idc, String netdev_type, String netdev_func, String netdev_pro, String netdev_model){
+    public ResponseEntity<Map> cmdbNetdevicesList(String page, String length, String netdev_idc, String netdev_type, String netdev_func, String netdev_pro, String netdev_model, String netdev_admin_ip){
         try{
-        	Map<String,Object> cmdbNetdevices = cmdbService.getCmdbNetdevicesList(page, length, netdev_idc, netdev_type, netdev_func, netdev_pro, netdev_model);
+        	Map<String,Object> cmdbNetdevices = cmdbService.getCmdbNetdevicesList(page, length, netdev_idc, netdev_type, netdev_func, netdev_pro, netdev_model,netdev_model);
 
             Map<String,Object> result = new HashMap<String,Object>();
             result.put("success", true);
             result.put("data", cmdbNetdevices);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/cmdbIdcexports")
+    public ResponseEntity<Map> cmdbIdcexportsList(String page, String length){
+        try{
+        	Map<String,Object> cmdbIdcexports = cmdbService.getCmdbIdcexportsList(page, length);
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", cmdbIdcexports);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/cmdbIdclines")
+    public ResponseEntity<Map> cmdbIdclinesList(String page, String length){
+        try{
+        	Map<String,Object> cmdbIdclines = cmdbService.getCmdbIdclinesList(page, length);
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", cmdbIdclines);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/cmdbServerMonitor")
+    public ResponseEntity<Map> cmdbServerMonitor(String begin,String end ,int minuteInterval ,String ip){
+        try{
+        	List<Map> cmdbServerMonitor = cmdbService.getCmdbServerMonitor(begin, end,minuteInterval,ip);
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", cmdbServerMonitor);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/cmdbNetdevicesMonitor")
+    public ResponseEntity<Map> cmdbNetdevicesMonitor(String begin,String end ,int minuteInterval ,String ip){
+        try{
+        	List<Map> cmdbNetdevicesMonitor = cmdbService.getCmdbNetdevicesMonitor(begin, end,minuteInterval,ip);
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", cmdbNetdevicesMonitor);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/cmdbIdcMonitor")
+    public ResponseEntity<Map> cmdbIdcMonitor(String begin,String end ,int interval ,String id){
+        try{
+        	Map cmdbIdcMonitor = cmdbService.getCmdbIdcMonitor(begin, end,interval,id);
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", cmdbIdcMonitor);
             return new ResponseEntity<Map>(result, HttpStatus.OK);
         }catch(Throwable t){
             log.error(t.getMessage(), t);

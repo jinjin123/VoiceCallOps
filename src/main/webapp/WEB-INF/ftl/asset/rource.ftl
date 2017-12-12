@@ -4,6 +4,6 @@
  <#list item.data.detail as detailData>
 所属地: ${detailData.region}
 数量:${detailData.count}
-
  </#list>
+ 
 </#list>
