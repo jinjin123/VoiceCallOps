@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import com.saicmotor.ops.wwx.biz.BizExecutor;
+import com.saicmotor.ops.wwx.dialog.ConversationMnger;
 import com.saicmotor.ops.wwx.service.BaiduYuYinService;
 import com.saicmotor.ops.wwx.service.DutyPlanService;
 import com.saicmotor.ops.wwx.service.TuLingService;
@@ -70,6 +71,9 @@ public class MsgHandler {
     @Autowired
     private BizExecutor bizExecutor;
 
+    @Autowired
+    private ConversationMnger cm;
+
     @PostConstruct
     public void init() throws Exception{
         this.wxcpt = new WXBizMsgCrypt(sToken, sEncodingAESKey, sCorpID);
@@ -129,6 +133,16 @@ public class MsgHandler {
         String content = (String)msg.get("Content");
         Map<String,Object> answer = tuLingService.getTalkAnswer((String)msg.get("FromUserName"), content, null);
         log.info("Q: {} \n A:{}", content, answer.get("text"));
+
+        try{
+            String tmp = (String)answer.get("text");
+            if ( tmp!=null && !tmp.startsWith("ACT.") ){
+                tmp = cm.talk((String)msg.get("FromUserName"), tmp);
+                answer.put("text", tmp);
+            }
+        }catch (Throwable t){
+            log.error(t.getMessage(), t);
+        }
         
         try{
             if( bizExecutor.accept((String)answer.get("text")) ){
