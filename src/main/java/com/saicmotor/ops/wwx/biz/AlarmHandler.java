@@ -32,4 +32,16 @@ public class AlarmHandler extends BizHandler {
         return result;
     }
 
+    public Map<String,Object> getAlarmListNew() throws Exception{
+
+        Map<String,Object> alarmsMap = alarmService.getAlarmListNew();
+        List<Map> alarms = (List) alarmsMap.get("resultList");
+
+        Map<String,Object> result = new HashMap<String,Object>();
+        result.put("msgType", "text");
+        result.put("msgFtl", "alarm/msg2.ftl");
+        result.put("data",alarms);
+        return result;
+    }
+
 }

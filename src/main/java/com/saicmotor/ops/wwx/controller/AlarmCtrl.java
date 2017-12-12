@@ -33,6 +33,21 @@ public class AlarmCtrl {
             return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping("/alarmList")
+    public ResponseEntity<Map> alarmList(){
+        try{
+            Map<String,Object> alarms = alarmService.getAlarmListNew();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", alarms);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
     @RequestMapping("/alarmDetail")
     public ResponseEntity<Map> alarmDetail(int id){
@@ -48,7 +63,8 @@ public class AlarmCtrl {
             return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+//    choose different alarm level interface
     @RequestMapping("/alarmLevel")
     public ResponseEntity<Map> alarmLevel(){
         try{

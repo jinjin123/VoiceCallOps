@@ -20,6 +20,9 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Value("${yunwei.alarm.url}")
     private String yAlarmUrl ;
+
+    @Value("${yunwei.alarmList.url}")
+    private String yAlarmListUrl ;
     
     @Value("${yunwei.alarmDetail.url}")
     private String yAlarmDetailUrl ;
@@ -55,6 +58,21 @@ public class AlarmServiceImpl implements AlarmService {
         resultMap.put("resultList", resultList);
         return resultMap;
     }
+
+    public List<Map> getAlarmListNew() throws Exception {
+        String url = this.yAlarmListUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> data = (List)((Map)result.get("body")).get("data");
+        List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+            Map<String,Object> tmp = new HashMap<String,Object>();
+            tmp.put("name", map.get("name"));
+            tmp.put("value", (String)map.get("value"));
+            resultList.add(tmp);
+        }
+        return resultList;
+    }
+
 
     public Map<String,Object> getAlarmDetail(int id) throws Exception {
     	

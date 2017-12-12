@@ -21,7 +21,14 @@ public interface AlarmService {
 	 * @throws Exception
 	 */
 	Map<String,Object> getAlarmList(String start, String length, String origin, String status, String module_id_one, String level) throws Exception;
-	
+
+	/**
+	 * select alarm new one
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getAlarmListNew() throws Exceptiion;
+
 	/**
 	 * 查询告警详情
 	 * @return
