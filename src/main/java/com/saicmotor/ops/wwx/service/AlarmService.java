@@ -27,7 +27,7 @@ public interface AlarmService {
 	 * @return
 	 * @throws Exception
 	 */
-	Map<String,Object> getAlarmListNew() throws Exceptiion;
+	Map<String,Object> getAlarmListNew(String length) throws Exception;
 
 	/**
 	 * 查询告警详情

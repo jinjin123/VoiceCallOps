@@ -59,20 +59,14 @@ public class AlarmServiceImpl implements AlarmService {
         return resultMap;
     }
 
-    public List<Map> getAlarmListNew() throws Exception {
+    public Map<String,Object> getAlarmListNew(String length) throws Exception {
         String url = this.yAlarmListUrl;
         Map<String,Object> result = restUtil.getJson(url);
-        List<Map> data = (List)((Map)result.get("body")).get("data");
-        List<Map> resultList = new ArrayList<Map>();
-        for (Map map : data) {
-            Map<String,Object> tmp = new HashMap<String,Object>();
-            tmp.put("name", map.get("name"));
-            tmp.put("value", (String)map.get("value"));
-            resultList.add(tmp);
-        }
-        return resultList;
+        List<Map> resultList = refactorNew( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList",resultList);
+        return resultMap;
     }
-
 
     public Map<String,Object> getAlarmDetail(int id) throws Exception {
     	
@@ -199,6 +193,16 @@ public class AlarmServiceImpl implements AlarmService {
         	
         	tmp.put("create_time", (String)map.get("create_time"));
         	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    private List<Map> refactorNew(List<Map> data) throws Exception{
+        List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+            Map<String,Object> tmp = new HashMap<String,Object>();
+            tmp.put("name", map.get("name"));
+            tmp.put("value", map.get("value"));
+            resultList.add(tmp);
         }
         return resultList;
     }

@@ -32,9 +32,10 @@ public class AlarmHandler extends BizHandler {
         return result;
     }
 
-    public Map<String,Object> getAlarmListNew() throws Exception{
+    public Map<String,Object> getAlarmListNew(String... params) throws Exception{
+        String length = params[0];
 
-        Map<String,Object> alarmsMap = alarmService.getAlarmListNew();
+        Map<String,Object> alarmsMap = alarmService.getAlarmListNew(length);
         List<Map> alarms = (List) alarmsMap.get("resultList");
 
         Map<String,Object> result = new HashMap<String,Object>();

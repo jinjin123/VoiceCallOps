@@ -35,9 +35,9 @@ public class AlarmCtrl {
     }
 
     @RequestMapping("/alarmList")
-    public ResponseEntity<Map> alarmList(){
+    public ResponseEntity<Map> alarmList(String length){
         try{
-            Map<String,Object> alarms = alarmService.getAlarmListNew();
+            Map<String,Object> alarms = alarmService.getAlarmListNew(length);
 
             Map<String,Object> result = new HashMap<String,Object>();
             result.put("success", true);
