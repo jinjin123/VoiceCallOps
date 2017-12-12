@@ -64,6 +64,14 @@
         </property>
     </bean>
 
+    <bean id="dialogMnger" class="com.saicmotor.ops.wwx.dialog.ConversationMnger">
+        <property name="conversations">
+            <set>
+                <bean class="com.saicmotor.ops.wwx.dialog.conversations.RebootVM"/>
+            </set>
+        </property>
+    </bean>
+
 
     <!-- ==================定义连接管理器============================ -->
     <bean id="httpClientConnectionManager" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" destroy-method="close">
