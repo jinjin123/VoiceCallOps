@@ -143,7 +143,7 @@ public class MsgHandler {
         }catch (Throwable t){
             log.error(t.getMessage(), t);
         }
-        
+
         try{
             if( bizExecutor.accept((String)answer.get("text")) ){
                 log.info("found action cmd : {}", answer.get("text"));
