@@ -60,6 +60,9 @@
                 <entry key="alarm">
                     <bean class="com.saicmotor.ops.wwx.biz.AlarmHandler"/>
                 </entry>
+                <entry key="tenant">
+                    <bean class="com.saicmotor.ops.wwx.biz.TenantnumHandler"/>
+                </entry>
                 <entry key="cmdb">
                     <bean class="com.saicmotor.ops.wwx.biz.CmdbHandler"/>
                 </entry>

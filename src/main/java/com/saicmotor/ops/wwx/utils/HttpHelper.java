@@ -51,9 +51,10 @@ public class HttpHelper {
         }
 
         if( headers!=null && headers.size()>0 ){
-            for(String key : headers.keySet()){
-                req.addHeader(key, headers.get(key).toString());
-            }
+//            for(String key : headers.keySet()){
+//                req.addHeader(key, headers.get(key).toString());
+//            }
+            req.addHeader("apikey","242aa4b2-0607-11e7-9521-46ccfb50c74d");
         }
 
         if( "POST-JSON".equalsIgnoreCase(method) ){
@@ -111,6 +112,22 @@ public class HttpHelper {
         }
         return result;
     }
+
+    public Map<String,Object> getJsonCustom(String url) throws Exception{
+        String keystr = "{\"apikey\":\"242aa4b2-0607-11e7-9521-46ccfb50c74d\"}";
+        Object jsonObject= jsonMapper.readValue(keystr,Object.class);
+        Map header =  new HashMap<String, Object>();
+        header.put("apikey",jsonObject);
+        log.info("header {}",header);
+        Map result = request("GET", url, null, header, null);
+        byte[] body = (byte[])result.get("body");
+        if( body!=null && body.length>0 ){
+            Object json = jsonMapper.readValue(body, Object.class);
+            result.put("body", json);
+        }
+        return result;
+    }
+
 
     public Map<String,Object> getBodyAsByteArray(String url, Map<String,Object> querys) throws Exception{
         return request("GET", url, querys, null,null);
