@@ -9,6 +9,11 @@ import com.saicmotor.ops.wwx.service.BaiduYuYinService;
 import com.saicmotor.ops.wwx.service.DutyPlanService;
 import com.saicmotor.ops.wwx.service.TuLingService;
 import com.saicmotor.ops.wwx.service.WWXService;
+import com.saicmotor.ops.wwx.service.HiService;
+
+import freemarker.template.Template;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import java.io.StringWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +30,7 @@ import javax.annotation.PostConstruct;
 
 import java.util.Map;
 import java.util.Random;
+
 
 /**
  * Created by kevinsun0716 on 2017/10/23.
@@ -52,6 +58,9 @@ public class MsgHandler {
     @Value("${yunwei.domain.url}")
     private String yDomainUrl ;
 
+    @Value("${yunwei.alarmList.url}")
+    private String yAlarmListUrl ;
+
     @Autowired
     private XmlMapper xmlMapper;
     @Autowired
@@ -63,6 +72,14 @@ public class MsgHandler {
     private BaiduYuYinService baiduYuYinService;
     @Autowired
     private DutyPlanService dutyPlanService;
+
+
+    // for render template
+    @Autowired
+    private FreeMarkerConfigurer freemarker;
+
+    @Autowired
+    private HiService hiservice;
 
     private WXBizMsgCrypt wxcpt;
 
@@ -155,14 +172,29 @@ public class MsgHandler {
             log.error(t.getMessage(), t);
         }
 
+//        if( content!=null && content.equals(answer.get("text")) ){
+//            if ( "voice".equals(msg.get("MsgType")) ){
+//                answer.put("text", "臣没有听清楚，请陛下再说一遍");
+//            }else{
+//                answer.put("text", "臣无法做到，请明示。");
+//            }
+//        }
+
         if( content!=null && content.equals(answer.get("text")) ){
-            if ( "voice".equals(msg.get("MsgType")) ){
-                answer.put("text", "臣没有听清楚，请陛下再说一遍");
-            }else{
-                answer.put("text", "臣无法做到，请明示。");
+            if (content.matches("(.*)你好(.*)")) {
+                //return  template  data
+                Map<String, Object> result = hiservice.getHianswer((String) yAlarmListUrl, (String) msg.get("FromUserName"));
+                if (result.containsKey("msgFtl")) {
+                    Template tpl = freemarker.getConfiguration().getTemplate((String) result.get("msgFtl"));
+                    StringWriter out = new StringWriter();
+
+                    // template render return result to output
+                    tpl.process(result, out);
+                    result.put("msgResult", out.toString());
+                    answer.put("text", result.get("msgResult"));
+                }
             }
         }
-
         Random random = new Random(System.currentTimeMillis());
         String tpl =
                 "<xml>\n" +
