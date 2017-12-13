@@ -42,5 +42,12 @@ public interface DashboardService {
 	 * @throws Exception
 	 */
 	Map<String,Object> getTenantTopPie() throws Exception;
+	
+	/**
+	 * 重点租户信息查询
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getKeyTenantInfo() throws Exception;
 }
 

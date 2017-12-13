@@ -29,6 +29,8 @@ public class DashboardServiceImpl implements DashboardService {
     private String yDashboardNetdevicesPieUrl ;
     @Value("${yunwei.dashboardTenantTopPie.url}")
     private String yDashboardTenantTopPieUrl ;
+    @Value("${yunwei.dashboardKeyTenantInfo.url}")
+    private String yDashboardKeyTenantInfoUrl ;
 
     @Autowired
     private HttpHelper restUtil;
@@ -84,6 +86,16 @@ public class DashboardServiceImpl implements DashboardService {
         String url = this.yDashboardTenantTopPieUrl;
         Map<String,Object> result = restUtil.getJson(url);
         List<Map> resultList = refactorTopPie( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", resultList);
+        return resultMap;
+    }
+    
+    public Map<String,Object> getKeyTenantInfo() throws Exception {
+    	
+        String url = this.yDashboardKeyTenantInfoUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> resultList = refactorKeyTenantInfo( (List)((Map)result.get("body")).get("data") );
         Map<String,Object> resultMap = new HashMap<String,Object>();
         resultMap.put("resultList", resultList);
         return resultMap;
@@ -171,6 +183,27 @@ public class DashboardServiceImpl implements DashboardService {
         	tmp.put("tenant", (String)map.get("tenant"));
         	tmp.put("count", map.get("count"));
         	resultList.add(tmp);
+        }
+        return resultList;
+    }
+    
+    private List<Map> refactorKeyTenantInfo(List<Map> data) throws Exception{
+    	List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+        	Map dataMap = new HashMap();
+        	dataMap.put("tenant_name", (String)map.get("tenant_name"));
+        	
+        	List<Map> resourcesList = new ArrayList<Map>();
+        	for(Map resourcesMap:(List<Map>) map.get("resources")) {
+        		Map<String,Object> tmp = new HashMap<String,Object>();
+        		tmp.put("id", (String)resourcesMap.get("id"));
+        		tmp.put("value", resourcesMap.get("value"));
+        		tmp.put("name", (String)resourcesMap.get("name"));
+        		resourcesList.add(tmp);
+        	}
+        	dataMap.put("resources", resourcesList);
+        	
+        	resultList.add(dataMap);
         }
         return resultList;
     }

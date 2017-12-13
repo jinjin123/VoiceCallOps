@@ -93,4 +93,19 @@ public class DashboardCtrl {
             return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @RequestMapping("/keyTenantInfo")
+    public ResponseEntity<Map> getKeyTenantInfo(){
+        try{
+            Map keyTenantInfoMap = dashboardService.getKeyTenantInfo();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", keyTenantInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
