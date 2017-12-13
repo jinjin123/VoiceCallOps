@@ -65,7 +65,7 @@ public class DashboardServiceImpl implements DashboardService {
     	
         String url = this.yDashboardServerPieUrl;
         Map<String,Object> result = restUtil.getJson(url);
-        List<Map> resultList = refactorCOuntPie( (List)((Map)result.get("body")).get("data") );
+        List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
         Map<String,Object> resultMap = new HashMap<String,Object>();
         resultMap.put("resultList", resultList);
         return resultMap;
@@ -75,7 +75,7 @@ public class DashboardServiceImpl implements DashboardService {
     	
         String url = this.yDashboardNetdevicesPieUrl;
         Map<String,Object> result = restUtil.getJson(url);
-        List<Map> resultList = refactor( (List)((Map)result.get("body")).get("data") );
+        List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
         Map<String,Object> resultMap = new HashMap<String,Object>();
         resultMap.put("resultList", resultList);
         return resultMap;
@@ -165,7 +165,7 @@ public class DashboardServiceImpl implements DashboardService {
         return lineChartMap;
     }
     
-    private List<Map> refactorCOuntPie(List<Map> data) throws Exception{
+    private List<Map> refactorCountPie(List<Map> data) throws Exception{
     	List<Map> resultList = new ArrayList<Map>();
         for (Map map : data) {
         	Map<String,Object> tmp = new HashMap<String,Object>();
