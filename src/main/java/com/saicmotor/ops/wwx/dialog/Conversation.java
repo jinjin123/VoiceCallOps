@@ -46,6 +46,19 @@ public interface Conversation {
      */
     String buildAction();
 
+    /**
+     * 取指定问题的答案
+     * @param idx
+     * @return
+     */
+    Object getDataById(int idx);
+
+    /**
+     * 取全部问题的答案
+     * @return
+     */
+    Object[] getDatas();
+
 }
 
 

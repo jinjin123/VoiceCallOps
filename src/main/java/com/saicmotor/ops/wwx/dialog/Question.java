@@ -21,4 +21,10 @@ public interface Question {
      */
     String getData();
 
+    /**
+     * 设置会话实例
+     * @param conversation
+     */
+    void setConversation(Conversation conversation);
+
 }

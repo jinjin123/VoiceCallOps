@@ -30,6 +30,7 @@ public abstract class BaseConversationImpl implements Conversation{
 
     public void appendQuestion(Question question){
         questions.add(question);
+        question.setConversation(this);
     }
 
     public String getActName() {
@@ -73,6 +74,10 @@ public abstract class BaseConversationImpl implements Conversation{
             dts.add(q.getData());
         }
         return dts.toArray();
+    }
+
+    public Object getDataById(int idx){
+        return questions.get(idx).getData();
     }
 
     public abstract String buildAction() ;

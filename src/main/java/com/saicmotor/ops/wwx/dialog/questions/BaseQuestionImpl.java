@@ -1,5 +1,6 @@
 package com.saicmotor.ops.wwx.dialog.questions;
 
+import com.saicmotor.ops.wwx.dialog.Conversation;
 import com.saicmotor.ops.wwx.dialog.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 public abstract class BaseQuestionImpl implements Question {
     protected static Logger logger = LoggerFactory.getLogger(BaseQuestionImpl.class);
     protected ApplicationContext appCtx;
+    protected Conversation conversation;
     protected String qtext;
     protected String data;
     protected String errMsg;
@@ -19,6 +21,10 @@ public abstract class BaseQuestionImpl implements Question {
 
     public void setApplicationContext(ApplicationContext appCtx){
         this.appCtx = appCtx;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
     }
 
     public String getQuestion() {
