@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import javax.xml.bind.DatatypeConverter;
+
 
 /**
  * Created by Shen_JM on 2017/11/20.
@@ -41,6 +43,12 @@ public class AlarmServiceImpl implements AlarmService {
     
     @Value("${yunwei.alarmLevel.url}")
     private String yAlarmLevelUrl ;
+    
+    @Value("${yunwei.alarmAffirm.url}")
+    private String yAlarmAffirmUrl ;
+    
+    @Value("${yunwei.alarmSetRecovery.url}")
+    private String yAlarmSetRecoveryUrl ;
 
     @Autowired
     private HttpHelper restUtil;
@@ -86,6 +94,7 @@ public class AlarmServiceImpl implements AlarmService {
     	resultMap.put("create_time", (String)tmp.get("create_time"));
     	resultMap.put("content", (String)tmp.get("content"));
     	resultMap.put("notify_type_des", (String)tmp.get("notify_type_des"));
+    	resultMap.put("iam_openid", (String)tmp.get("iam_openid"));
     	
     	resultMap.put("origin", tmp.get("origin"));
     	resultMap.put("status", tmp.get("status"));
@@ -173,6 +182,38 @@ public class AlarmServiceImpl implements AlarmService {
         return resultList;
     }
     
+    public Map<String,Object> alarmAffirm(int id, String content, String openid) throws Exception {
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        try{
+            Map<String,Object> body = new HashMap<String, Object>();
+            body.put("id", id);
+            body.put("content", content);
+            body.put("openid", openid);
+            Map<String,Object> result = restUtil.postJson(yAlarmAffirmUrl, body);
+            resultMap.put("code", ((Map)result.get("body")).get("code"));
+            resultMap.put("msg", ((Map)result.get("body")).get("msg"));
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+        return resultMap;
+    }
+    
+    public Map<String,Object> alarmSetRecovery(int id) throws Exception {
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        try{
+            Map<String,Object> body = new HashMap<String, Object>();
+            body.put("id", id);
+
+            Map<String,Object> result = restUtil.postJson(yAlarmSetRecoveryUrl, body);
+            resultMap.put("code", ((Map)result.get("body")).get("code"));
+            resultMap.put("msg", ((Map)result.get("body")).get("msg"));
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+        return resultMap;
+    }
     
     private List<Map> refactor(List<Map> data) throws Exception{
     	List<Map> resultList = new ArrayList<Map>();

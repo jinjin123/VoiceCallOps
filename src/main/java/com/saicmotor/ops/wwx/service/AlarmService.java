@@ -70,5 +70,23 @@ public interface AlarmService {
 	 * @throws Exception
 	 */
 	List<Map> getAlarmModule() throws Exception;
+	
+	/**
+	 * 告警确认API
+	 * @param id
+	 * @param content
+	 * @param openid
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> alarmAffirm(int id, String content, String openid) throws Exception;
+	
+	/**
+	 * 告警设置为已处理API
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> alarmSetRecovery(int id) throws Exception;
 }
 

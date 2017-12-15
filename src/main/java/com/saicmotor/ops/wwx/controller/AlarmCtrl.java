@@ -1,5 +1,6 @@
 package com.saicmotor.ops.wwx.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saicmotor.ops.wwx.service.AlarmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
 
@@ -18,6 +22,8 @@ public class AlarmCtrl {
 
     @Autowired
     private AlarmService alarmService;
+    @Autowired
+    private ObjectMapper jsonMapper;
 
     @RequestMapping("/alarmQuery")
     public ResponseEntity<Map> alarmQuery(String start, String length, String origin, String status, String module_id_one, String level){
@@ -134,6 +140,33 @@ public class AlarmCtrl {
             result.put("success", true);
             result.put("data", alarmModule);
             return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/alarmAffirm")
+    @ResponseBody
+    public ResponseEntity<Map> alarmAffirmPost(@RequestBody() String body){
+    	try{
+	    	Map map = jsonMapper.readValue(body, Map.class);
+	    	int id = (Integer) map.get("id");
+	    	String content = (String) map.get("content");
+	    	String openid = (String) map.get("openid");
+            Map alarmAffirm = alarmService.alarmAffirm(id, content, openid);
+            return new ResponseEntity<Map>(alarmAffirm, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/alarmSetRecovery")
+    public ResponseEntity<Map> alarmSetRecoveryPost(Integer id){
+        try{
+            Map alarmSetRecovery = alarmService.alarmSetRecovery(id);
+            return new ResponseEntity<Map>(alarmSetRecovery, HttpStatus.OK);
         }catch(Throwable t){
             log.error(t.getMessage(), t);
             return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
