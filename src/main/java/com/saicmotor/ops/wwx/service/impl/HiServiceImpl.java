@@ -20,12 +20,16 @@ public class HiServiceImpl implements HiService {
     @Value("${yunwei.alarmList.url}")
     private String yAlarmListUrl ;
 
+    @Value("${yunwei.wechatname.url}")
+    private String ywechatnameUrl ;
     @Autowired
     private HttpHelper restUtil;
 
     public Map<java.lang.String, Object> getHianswer(String url, String user) throws Exception {
-//        String url = this.yAlarmListUrl;
+
         try{
+            Map usertmp = restUtil.getJsonCustom(String.format(ywechatnameUrl,user));
+            Object wechatname = ((Map)usertmp.get("body")).get("name");
             Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
             //return list
             List<Map> resultList = refactor( (List)((Map)resulttmp.get("body")).get("data") );
@@ -38,7 +42,7 @@ public class HiServiceImpl implements HiService {
             result.put("msgType", "text");
             result.put("msgFtl", "hiinfo/msg.ftl");
             result.put("data",alarms);
-            result.put("whoask", user);
+            result.put("whoask", wechatname);
             return result;
         }catch(Exception e){
             log.error(e.getMessage(), e);
