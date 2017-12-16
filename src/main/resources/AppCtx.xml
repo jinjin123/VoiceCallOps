@@ -78,6 +78,7 @@
         <property name="conversations">
             <set>
                 <bean class="com.saicmotor.ops.wwx.dialog.conversations.RebootVM"/>
+                <bean class="com.saicmotor.ops.wwx.dialog.conversations.Opeation"/>
             </set>
         </property>
     </bean>

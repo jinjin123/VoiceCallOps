@@ -1,6 +1,6 @@
 package com.saicmotor.ops.wwx.service.impl;
 
-import com.saicmotor.ops.wwx.service.RebootService;
+import com.saicmotor.ops.wwx.service.CommandService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saicmotor.ops.wwx.utils.HttpHelper;
 import org.slf4j.Logger;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class RebootServiceImpl implements RebootService {
-    private static Logger log = LoggerFactory.getLogger(RebootServiceImpl.class);
+public class CommandServiceImpl implements CommandService {
+    private static Logger log = LoggerFactory.getLogger(CommandServiceImpl.class);
 
     @Autowired
     private HttpHelper restUtil;
 
-    public Map<java.lang.String, Object> restartServer(String url) throws Exception {
+    public Map<java.lang.String, Object> execcommand(String url) throws Exception {
         try{
             Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
             return resulttmp;
@@ -29,5 +29,5 @@ public class RebootServiceImpl implements RebootService {
             throw e;
         }
     }
-
+    
 }

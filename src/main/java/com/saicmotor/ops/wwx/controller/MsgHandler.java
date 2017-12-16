@@ -15,6 +15,7 @@ import com.saicmotor.ops.wwx.service.ServerwithService;
 import com.saicmotor.ops.wwx.service.RestartwithService;
 import com.saicmotor.ops.wwx.service.RebootService;
 import com.saicmotor.ops.wwx.service.ChecknetService;
+import com.saicmotor.ops.wwx.service.CommandService;
 
 import freemarker.template.Template;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
@@ -76,6 +77,9 @@ public class MsgHandler {
 
     @Value("${yunwei.checknet.url}")
     private String ychecknetUrl;
+
+    @Value("${yunwei.command.url}")
+    private String ycommandUrl;
     @Autowired
     private HttpHelper restUtil;
 
@@ -107,6 +111,8 @@ public class MsgHandler {
 
     @Autowired
     private RestartwithService gorestart;
+    @Autowired
+    private CommandService gocommand;
 
     @Autowired
     private RebootService execrestart;
@@ -210,8 +216,10 @@ public class MsgHandler {
             if ( tmp!=null && !tmp.startsWith("ACT.") ){
                 tmp = cm.talk((String)msg.get("FromUserName"), tmp);
                 log.info("what's question?:",tmp);
-                if(tmp.contains("|")) {
-                    String[] tag = tmp.split("\\|");
+                //filter others Q
+                if(tmp.contains("|")|| tmp.contains(",")) {
+//                    String[] tag = tmp.split("\\|");
+                    String[] tag = tmp.contains("|")?tmp.split("\\|"):tmp.split(",");
                     if (tag[1].matches(regex) || tag[1].matches(regex2)) {
                         if ("user".equals(tag[0])) {
                             Map<String, Object> result = getServer.getService(String.format(ygetserverserviceUrl, tag[1]), tag[1]);
@@ -247,6 +255,9 @@ public class MsgHandler {
                                 url = url.replaceAll(" ","%20");
                                 Map<String,Object> result = checknet.checkserver(url);
                                 answer.put("text", ((Map)result.get("status")).get("content"));
+                        }else if("opt".equals(tag[0])){
+                            Map<String, Object> result = gocommand.execcommand(String.format(ycommandUrl, tag[1], tag[2], tag[3],tag[4]));
+                            answer.put("text",((Map)result.get("body")).get("content"));
                         }
                     }
                 }else{

@@ -29,7 +29,7 @@ public class RestartwithServiceImpl implements RestartwithService {
             resultMap.put("resultList", resultList);
 
             List<Map> alarms = (List) resultMap.get("resultList");
-            log.info("afafaf{}", alarms);
+            log.info("alarms{}", alarms);
 
             Map<String,Object> result = new HashMap<String,Object>();
             result.put("msgType", "text");
