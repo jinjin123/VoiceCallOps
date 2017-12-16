@@ -17,17 +17,11 @@ import java.util.*;
 public class ServerwithServiceImpl implements ServerwithService {
     private static Logger log = LoggerFactory.getLogger(ServerwithServiceImpl.class);
 
-    @Value("${yunwei.test.url}")
-    private String ytestUrl ;
-
-
     @Autowired
     private HttpHelper restUtil;
 
     public Map<java.lang.String, Object> getService(String url,String ip) throws Exception {
         try{
-//            Map usertmp = restUtil.getJsonCustom(String.format(ywechatnameUrl,user));
-//            Object wechatname = ((Map)usertmp.get("body")).get("name");
             Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
             //return list
             List<Map> resultList = refactor( (List)((Map)resulttmp.get("body")).get("data") );

@@ -242,7 +242,7 @@ public class MsgHandler {
                             log.info("args:{}", String.format(tag[1], tag[2], tag[3]));
                             answer.put("text", "正在重启,请稍后...回复'结果'将返回结果");
                         }else if("result".equals(tag[0])){
-                            // get the server result2
+                            // get the server result
                                 String url = String.format(ychecknetUrl, "ping -c 3 " + tag[1]);
                                 url = url.replaceAll(" ","%20");
                                 Map<String,Object> result = checknet.checkserver(url);
@@ -291,6 +291,11 @@ public class MsgHandler {
                     result.put("msgResult", out.toString());
                     answer.put("text", result.get("msgResult"));
                 }
+            }else if(content.matches("(.*)ping(.*)")){
+                String url = String.format(ychecknetUrl, content);
+                url = url.replaceAll(" ","%20");
+                Map<String,Object> result = checknet.checkserver(url);
+                answer.put("text", ((Map)result.get("status")).get("content"));
             }
         }
         Random random = new Random(System.currentTimeMillis());
