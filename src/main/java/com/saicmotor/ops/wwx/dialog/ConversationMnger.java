@@ -34,8 +34,13 @@ public class ConversationMnger implements ApplicationContextAware {
     public String talk(String openId, String answer) throws Exception{
         Conversation curConversation = null;
 
+        //del talk session
+        if("取消".equals(answer)){
+            curConversation = cache.remove(openId);
+        }
         //判断是否存在会话。
         curConversation = cache.get(openId);
+
 
         //判断是否开启新的会话
         if( curConversation==null ){

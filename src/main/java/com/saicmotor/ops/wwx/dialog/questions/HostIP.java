@@ -22,6 +22,4 @@ public class HostIP extends BaseQuestionImpl{
             return false;
         }
     }
-
-
 }

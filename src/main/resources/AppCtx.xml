@@ -13,6 +13,7 @@
     <context:component-scan base-package="com.saicmotor.ops"/>
     <context:property-placeholder location="classpath:/config.properties"/>
 
+
     <bean id="httpClientFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory">
         <property name="connectTimeout"  value="30000"/>
         <property name="readTimeout"  value="30000"/>

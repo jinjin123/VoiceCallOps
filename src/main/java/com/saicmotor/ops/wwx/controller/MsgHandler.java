@@ -5,11 +5,16 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import com.saicmotor.ops.wwx.biz.BizExecutor;
 import com.saicmotor.ops.wwx.dialog.ConversationMnger;
+import com.saicmotor.ops.wwx.utils.HttpHelper;
 import com.saicmotor.ops.wwx.service.BaiduYuYinService;
 import com.saicmotor.ops.wwx.service.DutyPlanService;
 import com.saicmotor.ops.wwx.service.TuLingService;
 import com.saicmotor.ops.wwx.service.WWXService;
 import com.saicmotor.ops.wwx.service.HiService;
+import com.saicmotor.ops.wwx.service.ServerwithService;
+import com.saicmotor.ops.wwx.service.RestartwithService;
+import com.saicmotor.ops.wwx.service.RebootService;
+import com.saicmotor.ops.wwx.service.ChecknetService;
 
 import freemarker.template.Template;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
@@ -30,6 +35,9 @@ import javax.annotation.PostConstruct;
 
 import java.util.Map;
 import java.util.Random;
+import java.util.*;
+//import org.json.simple.parser.JSONParser;
+//import org.json.simple.JSONObject;
 
 
 /**
@@ -60,6 +68,16 @@ public class MsgHandler {
 
     @Value("${yunwei.alarmList.url}")
     private String yAlarmListUrl ;
+    @Value("${yunwei.getserverservice.url}")
+    private String ygetserverserviceUrl ;
+
+    @Value("${yunwei.execserver.url}")
+    private String yexecserverUrl ;
+
+    @Value("${yunwei.checknet.url}")
+    private String ychecknetUrl;
+    @Autowired
+    private HttpHelper restUtil;
 
     @Autowired
     private XmlMapper xmlMapper;
@@ -81,6 +99,18 @@ public class MsgHandler {
     @Autowired
     private HiService hiservice;
 
+    @Autowired
+    private ChecknetService checknet;
+
+    @Autowired
+    private ServerwithService getServer;
+
+    @Autowired
+    private RestartwithService gorestart;
+
+    @Autowired
+    private RebootService execrestart;
+
     private WXBizMsgCrypt wxcpt;
 
     @Autowired
@@ -90,6 +120,8 @@ public class MsgHandler {
 
     @Autowired
     private ConversationMnger cm;
+
+//    private static int counter = 0;
 
     @PostConstruct
     public void init() throws Exception{
@@ -147,19 +179,85 @@ public class MsgHandler {
     }
 
     private ResponseEntity<byte[]> processTextMsg(Map<String,Object> msg) throws Exception{
+        String regex = "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\."
+                + "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\."
+                + "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\."
+                + "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+
+        String regex2="^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|"
+                + "(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|"
+                + "(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|"
+                + "(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|"
+                + "(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|"
+                + "(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|"
+                + "(([0-9A-Fa-f]{1,4}:){6}((\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))"
+                + "\\b)\\.){3}(\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|"
+                + "(\\d{1,2}))\\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\\b((25[0-5])|"
+                + "(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b)\\.){3}(\\b((25[0-5])|"
+                + "(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b))|"
+                + "(::([0-9A-Fa-f]{1,4}:){0,5}((\\b((25[0-5])|"
+                + "(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b)\\.){3}(\\b((25[0-5])|"
+                + "(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b))|"
+                + "([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|"
+                + "(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|"
+                + "(([0-9A-Fa-f]{1,4}:){1,7}:))$";
         String content = (String)msg.get("Content");
         Map<String,Object> answer = tuLingService.getTalkAnswer((String)msg.get("FromUserName"), content, null);
         log.info("Q: {} \n A:{}", content, answer.get("text"));
 
         try{
-            String tmp = (String)answer.get("text");
+            String tmp = (String)answer.get("text").toString();
             if ( tmp!=null && !tmp.startsWith("ACT.") ){
                 tmp = cm.talk((String)msg.get("FromUserName"), tmp);
-                answer.put("text", tmp);
+                log.info("what's question?:",tmp);
+                if(tmp.contains("|")) {
+                    String[] tag = tmp.split("\\|");
+                    if (tag[1].matches(regex) || tag[1].matches(regex2)) {
+                        if ("user".equals(tag[0])) {
+                            Map<String, Object> result = getServer.getService(String.format(ygetserverserviceUrl, tag[1]), tag[1]);
+                            log.info("username{}", result);
+                            if (result.containsKey("msgFtl")) {
+                                Template tpl = freemarker.getConfiguration().getTemplate((String) result.get("msgFtl"));
+                                StringWriter out = new StringWriter();
+                                // template render return result to output
+                                tpl.process(result, out);
+                                result.put("msgResult", out.toString());
+                                answer.put("text", result.get("msgResult"));
+                            }
+                        } else if("confirm".equals(tag[0])) {
+                            log.info("restart confirm {}", tag);
+                            Map<String, Object> result = gorestart.restartconfirm(String.format(ygetserverserviceUrl, tag[1]), tag[1]);
+                            log.info("xxxx{}", result);
+                            if (result.containsKey("msgFtl")) {
+                                Template tpl = freemarker.getConfiguration().getTemplate((String) result.get("msgFtl"));
+                                StringWriter out = new StringWriter();
+                                // template render return result to output
+                                tpl.process(result, out);
+                                result.put("msgResult", out.toString());
+                                answer.put("text", result.get("msgResult"));
+                            }
+                        }else if ("是".equals(tag[0])) {
+                            //restart confirm  YES and exec restart opeation
+                            Map<String, Object> result = execrestart.restartServer(String.format(yexecserverUrl, tag[1], tag[2], tag[3], msg.get("FromUserName")));
+                            log.info("args:{}", String.format(tag[1], tag[2], tag[3]));
+                            answer.put("text", "正在重启,请稍后...回复'结果'将返回结果");
+                        }else if("result".equals(tag[0])){
+                            // get the server result2
+                                String url = String.format(ychecknetUrl, "ping -c 3 " + tag[1]);
+                                url = url.replaceAll(" ","%20");
+                                Map<String,Object> result = checknet.checkserver(url);
+                                answer.put("text", ((Map)result.get("status")).get("content"));
+                        }
+                    }
+                }else{
+                    log.info("finish msg:{}", tmp);
+                    answer.put("text", tmp);
+                }
             }
         }catch (Throwable t){
             log.error(t.getMessage(), t);
         }
+
 
         try{
             if( bizExecutor.accept((String)answer.get("text")) ){

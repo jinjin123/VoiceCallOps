@@ -5,6 +5,9 @@ import com.saicmotor.ops.wwx.dialog.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.*;
 
 public abstract class BaseQuestionImpl implements Question {
     protected static Logger logger = LoggerFactory.getLogger(BaseQuestionImpl.class);
@@ -13,6 +16,7 @@ public abstract class BaseQuestionImpl implements Question {
     protected String qtext;
     protected String data;
     protected String errMsg;
+
 
     public BaseQuestionImpl(String qtext, String data){
         this.qtext = qtext;
@@ -36,5 +40,7 @@ public abstract class BaseQuestionImpl implements Question {
     public String getData() {
         return data;
     }
+
+
 
 }

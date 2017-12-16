@@ -6,7 +6,8 @@ public interface Question {
      * 获取问题文字
      * @return
      */
-    String getQuestion();
+//    String getQuestion();
+    String getQuestion() ;
 
     /**
      * 验证回答是否合法.
