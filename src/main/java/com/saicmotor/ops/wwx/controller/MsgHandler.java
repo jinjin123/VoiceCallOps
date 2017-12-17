@@ -256,7 +256,9 @@ public class MsgHandler {
                                 Map<String,Object> result = checknet.checkserver(url);
                                 answer.put("text", ((Map)result.get("status")).get("content"));
                         }else if("opt".equals(tag[0])){
-                            Map<String, Object> result = gocommand.execcommand(String.format(ycommandUrl, tag[1], tag[2], tag[3],tag[4]));
+                            String url = String.format(ycommandUrl, tag[1], tag[2], tag[3],tag[4]);
+                            url = url.replaceAll(" ","%20");
+                            Map<String, Object> result = gocommand.execcommand(url);
                             answer.put("text",((Map)result.get("body")).get("content"));
                         }
                     }

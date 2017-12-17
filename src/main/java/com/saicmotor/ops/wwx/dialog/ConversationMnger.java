@@ -35,7 +35,7 @@ public class ConversationMnger implements ApplicationContextAware {
         Conversation curConversation = null;
 
         //del talk session
-        if("取消".equals(answer)){
+        if(answer.matches("(.*)取消(.*)")){
             curConversation = cache.remove(openId);
         }
         //判断是否存在会话。

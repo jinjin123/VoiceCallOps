@@ -23,7 +23,7 @@ public class ServerwithServiceImpl implements ServerwithService {
     public Map<java.lang.String, Object> getService(String url,String ip) throws Exception {
         try{
             Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
-            if(resulttmp.containsKey("data")) {
+            if(((Map) resulttmp.get("body")).containsKey("data")) {
                 //return list
                 List<Map> resultList = refactor((List) ((Map) resulttmp.get("body")).get("data"));
                 Map<String, Object> resultMap = new HashMap<String, Object>();
