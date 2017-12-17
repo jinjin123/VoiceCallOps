@@ -23,21 +23,30 @@ public class ServerwithServiceImpl implements ServerwithService {
     public Map<java.lang.String, Object> getService(String url,String ip) throws Exception {
         try{
             Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
-            //return list
-            List<Map> resultList = refactor( (List)((Map)resulttmp.get("body")).get("data") );
-            Map<String,Object> resultMap = new HashMap<String,Object>();
-            resultMap.put("resultList", resultList);
+            if(resulttmp.containsKey("data")) {
+                //return list
+                List<Map> resultList = refactor((List) ((Map) resulttmp.get("body")).get("data"));
+                Map<String, Object> resultMap = new HashMap<String, Object>();
+                resultMap.put("resultList", resultList);
 
-            List<Map> alarms = (List) resultMap.get("resultList");
-            log.info("afafaf{}", alarms);
+                List<Map> alarms = (List) resultMap.get("resultList");
+                log.info("get service alarms:{}", alarms);
 
-            Map<String,Object> result = new HashMap<String,Object>();
-            result.put("msgType", "text");
-            result.put("msgFtl", "service/msg.ftl");
-            result.put("data",alarms);
-            result.put("ip",ip);
-            log.info("result{}", result);
-            return result;
+                Map<String, Object> result = new HashMap<String, Object>();
+                result.put("msgType", "text");
+                result.put("msgFtl", "service/msg.ftl");
+                result.put("data", alarms);
+                result.put("ip", ip);
+                log.info("result{}", result);
+                return result;
+            }else{
+                Object Msg = ((Map) resulttmp.get("body")).get("msg");
+                Map<String, Object> result = new HashMap<String, Object>();
+                result.put("msgType", "text");
+                result.put("msgFtl", "error/msg.ftl");
+                result.put("data", Msg);
+                return result;
+            }
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;
