@@ -44,7 +44,7 @@ public class DashboardServiceImpl implements DashboardService {
         Map<String,Object> resultMap = new HashMap<String,Object>();
         resultMap.put("tenant_count", map.get("tenant_count"));
         resultMap.put("network_count", map.get("network_count"));
-        resultMap.put("rack_count", map.get("rack_count"));
+        resultMap.put("container_data", map.get("container_data"));
         resultMap.put("service_vm_total", map.get("service_vm_total"));
         resultMap.put("idc_export_line_count", map.get("idc_export_line_count"));
         resultMap.put("service_total", map.get("service_total"));
