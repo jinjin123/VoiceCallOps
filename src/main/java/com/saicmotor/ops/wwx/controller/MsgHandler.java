@@ -311,7 +311,7 @@ public class MsgHandler {
                 Map<String,Object> result = checknet.checkserver(url);
                 answer.put("text", ((Map)result.get("status")).get("content"));
             }else if(content.matches("(.*)你能做什么(.*)")){
-                answer.put("text", "我能提供以下文字或语音服务：\n" +
+                answer.put("text", "您可以输入以下文字或语音命令：\n" +
                         "1.查询告警；\n" +
                         "2.查询值班；\n" +
                         "3.查询租户资源；\n" +
