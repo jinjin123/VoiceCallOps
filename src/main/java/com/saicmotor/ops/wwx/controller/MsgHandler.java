@@ -263,7 +263,8 @@ public class MsgHandler {
                         }
                     }
                 }else{
-                    log.info("finish msg:{}", tmp);
+                    log.info("return tuling or not match:{}", tmp);
+                    // return talk session content
                     answer.put("text", tmp);
                 }
             }
@@ -309,6 +310,8 @@ public class MsgHandler {
                 url = url.replaceAll(" ","%20");
                 Map<String,Object> result = checknet.checkserver(url);
                 answer.put("text", ((Map)result.get("status")).get("content"));
+            }else if(content.matches("(.*)你能做什么(.*)")){
+                answer.put("text", "我能提供以下服务：\n" + "1.查询告警；2.查询值班；3.查询租户资源；4.查询数据中心资源; 5.操作服务器; 6.检查网络；");
             }
         }
         Random random = new Random(System.currentTimeMillis());
