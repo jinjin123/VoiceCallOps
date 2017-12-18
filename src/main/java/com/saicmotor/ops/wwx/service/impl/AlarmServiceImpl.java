@@ -109,6 +109,17 @@ public class AlarmServiceImpl implements AlarmService {
     	resultMap.put("origin_des", (String)tmp.get("origin_des"));
     	resultMap.put("modify_time", (String)tmp.get("modify_time"));
     	
+    	List<Map> historysList = new ArrayList<Map>();
+    	for(Map map: (List<Map>)tmp.get("historys_list")){
+    		Map historyMap = new HashMap();
+    		historyMap.put("username", (String)map.get("username"));
+    		historyMap.put("content", (String)map.get("content"));
+    		historyMap.put("create_time", (String)map.get("create_time"));
+    		historyMap.put("id", map.get("id"));
+    		historysList.add(historyMap);
+    	}
+    	resultMap.put("historys_list", historysList);
+    	resultMap.put("historys_count", tmp.get("historys_count"));
         return resultMap;
     }
     
