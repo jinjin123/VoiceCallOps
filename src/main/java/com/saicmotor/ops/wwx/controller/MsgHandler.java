@@ -311,7 +311,14 @@ public class MsgHandler {
                 Map<String,Object> result = checknet.checkserver(url);
                 answer.put("text", ((Map)result.get("status")).get("content"));
             }else if(content.matches("(.*)你能做什么(.*)")){
-                answer.put("text", "我能提供以下服务：\n" + "1.查询告警；2.查询值班；3.查询租户资源；4.查询数据中心资源; 5.操作服务器; 6.检查网络；");
+                answer.put("text", "我能提供以下服务：\n" +
+                        "1.查询告警；" +
+                        "2.查询值班；" +
+                        "3.查询租户资源；" +
+                        "4.查询数据中心资源; " +
+                        "5.操作服务器;(例如如下命令:df -h,free -m,ping -c 4 ip,tail -5 /var/log/messages;禁止echo,reboot等不允许的操作,操作前请确认文件是否存在!) " +
+                        "6.检查网络；(例如如下命令:ping -c 4 ip;)" +
+                        "7.请勿执行长时间运行无法停止的命令;(例如如下命令:ping ip,top,tail -f )");
             }
         }
         Random random = new Random(System.currentTimeMillis());
