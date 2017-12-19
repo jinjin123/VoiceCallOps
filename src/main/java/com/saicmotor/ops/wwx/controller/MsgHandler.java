@@ -324,7 +324,7 @@ public class MsgHandler {
             }else if(content.matches("取消(.*)")){
                 answer.put("text", "已取消该次会话!");
             }else{
-                answer.put("text", "臣没有听清楚，请陛下再说一遍");
+                answer.put("text", "臣妾没有听清楚，请陛下再说一遍");
             }
         }
         Random random = new Random(System.currentTimeMillis());
