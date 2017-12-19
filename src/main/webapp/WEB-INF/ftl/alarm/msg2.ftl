@@ -1,5 +1,3 @@
 <#list data as item>
-<#if item.name == "致命">
-有致命告警${item.value}条,<#elseif item.name == "严重">严重告警${item.value}条,<#elseif item.name == "一般">一般告警${item.value}条,<#elseif item.name == "警告">警告告警${item.value}条
-</#if></#list>
+<#if item.name == "致命"><#if item.value == "0">有致命告警${item.value}条,<#else>有致命告警<a href="http://112.65.23.133:7654/wwxweb/index.html#/AlarmDetails?id=${item.id}">${item.value}</a>条,</#if><#elseif  item.name == "严重"><#if item.value == "0">有严重告警${item.value}条,<#else>有严重告警<a href="http://112.65.23.133:7654/wwxweb/index.html#/AlarmDetails?id=${item.id}">${item.value}</a>条,</#if><#elseif  item.name == "一般"><#if item.value == "0">有一般告警${item.value}条,<#else>有一般告警<a href="http://112.65.23.133:7654/wwxweb/index.html#/AlarmDetails?id=${item.id}">${item.value}</a>条,</#if><#elseif  item.name == "警告"><#if item.value == "0">有警告告警${item.value}条,<#else>有警告告警<a href="http://112.65.23.133:7654/wwxweb/index.html#/AlarmDetails?id=${item.id}">${item.value}</a>条,</#if></#if></#list>
 查看 <a href="http://112.65.23.133:7654/wwxweb/#/AlarmList">告警列表</a>

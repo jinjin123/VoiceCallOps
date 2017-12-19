@@ -242,6 +242,7 @@ public class AlarmServiceImpl implements AlarmService {
         for (Map map : data) {
             Map<String,Object> tmp = new HashMap<String,Object>();
             tmp.put("name", map.get("name"));
+            tmp.put("id", map.get("alarm_id"));
             tmp.put("value", map.get("value"));
             resultList.add(tmp);
         }
