@@ -264,9 +264,9 @@ public class MsgHandler {
                     }
                 }else{
                     log.info("return tuling or not match:{}", tmp);
-                    // return talk session content
-//                    answer.put("text", tmp);
-                    answer.put("text", "臣没有听清楚，请陛下再说一遍");
+                    // return talk session  match content
+                    answer.put("text", tmp);
+//                    answer.put("text", "臣没有听清楚，请陛下再说一遍");
                 }
             }
         }catch (Throwable t){
@@ -319,8 +319,12 @@ public class MsgHandler {
                         "4.查询数据中心资源; \n" +
                         "5.操作服务器;(例如如下命令:df -h,free -m,ping -c 4 ip,tail -5 /var/log/messages;禁止echo,reboot等不允许的操作,操作前请确认文件是否存在!)\n " +
                         "6.检查网络；(例如如下命令:ping -c 4 ip;) \n" +
-                        "7.请勿执行长时间运行无法停止的命令;(例如如下命令:ping ip,top,tail -f ) \n" +
-                        "8.结束会话时,或者中断会话时,请文字或者语音回复'取消'");
+                        "7.请勿执行长时间运行无法停止的命令;(例如如下命令:ping ip,top,tail -f ) \n " +
+                        "注意!<结束会话时,或者中断会话时,请文字或者语音回复'取消'>");
+            }else if(content.matches("取消(.*)")){
+                answer.put("text", "已取消该次会话!");
+            }else{
+                answer.put("text", "臣没有听清楚，请陛下再说一遍");
             }
         }
         Random random = new Random(System.currentTimeMillis());
