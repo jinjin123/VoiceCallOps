@@ -265,7 +265,8 @@ public class MsgHandler {
                 }else{
                     log.info("return tuling or not match:{}", tmp);
                     // return talk session content
-                    answer.put("text", tmp);
+//                    answer.put("text", tmp);
+                    answer.put("text", "臣没有听清楚，请陛下再说一遍");
                 }
             }
         }catch (Throwable t){
