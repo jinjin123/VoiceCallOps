@@ -18,7 +18,7 @@ public class HostIP extends BaseQuestionImpl{
             this.data = answer;
             return true;
         }else{
-            this.errMsg = "ip地址错误";
+            this.data = "ip地址错误";
             return false;
         }
     }

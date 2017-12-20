@@ -13,7 +13,7 @@ public class RebootVM extends BaseConversationImpl {
     public RebootVM() {
         super("重启服务器","管理员输入IP/密码重启服务器");
 
-        this.appendQuestion(new HostIP("请输入服务器IP："));
+        this.appendQuestion(new HostIP("请输入正确的服务器IP："));
         this.appendQuestion(new UserNe("getipwithservice","xx",0,1));
         this.appendQuestion(new UserPwd());
         this.appendQuestion(new Confirm("confirmwithservice","xx",0,1));

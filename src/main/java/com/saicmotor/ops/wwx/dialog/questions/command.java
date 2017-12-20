@@ -8,12 +8,12 @@ public class command extends BaseQuestionImpl {
     }
 
     public command() {
-        super("请输入操作指令：", null);
+        super("请输入正确的操作指令：", null);
     }
 
     public boolean isValid(String answer) {
         if(answer.matches(notdo)){
-            this.errMsg = "该指令不允许";
+            this.data = "该指令不允许";
             return false;
         }else {
             this.data = answer;
