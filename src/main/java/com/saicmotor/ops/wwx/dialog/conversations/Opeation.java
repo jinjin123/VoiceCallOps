@@ -7,8 +7,6 @@ import com.saicmotor.ops.wwx.dialog.questions.HostIP;
 import com.saicmotor.ops.wwx.dialog.questions.UserNe;
 import com.saicmotor.ops.wwx.dialog.questions.UserPwd;
 import com.saicmotor.ops.wwx.dialog.questions.command;
-//import com.saicmotor.ops.wwx.dialog.questions.ConfirmDone;
-//import com.saicmotor.ops.wwx.dialog.questions.result;
 
 public class Opeation extends BaseConversationImpl {
     private static Logger log = LoggerFactory.getLogger(Opeation.class);
@@ -17,10 +15,10 @@ public class Opeation extends BaseConversationImpl {
     public Opeation() {
         super("操作服务器","操作命令");
 
-        this.appendQuestion(new HostIP("请输入IP?"));
+        this.appendQuestion(new HostIP("请输入正确的服务器IP："));
         this.appendQuestion(new UserNe("getipwithservice","xx",0,1));
         this.appendQuestion(new UserPwd());
-        this.appendQuestion(new command("请输入操作指令"));
+        this.appendQuestion(new command("请输入正确的操作指令"));
 //        this.appendQuestion(new Confirm("confirmwithservice","xx",0,1));
         //get the which Q match the A
 //        this.appendQuestion(new ConfirmDone("ConfirmDoneserver","xx",0,1,2,3));
