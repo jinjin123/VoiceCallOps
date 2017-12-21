@@ -2,6 +2,8 @@ package com.saicmotor.ops.wwx.dialog.conversations;
 
 import com.saicmotor.ops.wwx.dialog.Conversation;
 import com.saicmotor.ops.wwx.dialog.Question;
+import com.saicmotor.ops.wwx.dialog.questions.BaseQuestionImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -26,6 +28,9 @@ public abstract class BaseConversationImpl implements Conversation{
 
     public void setApplicationContext(ApplicationContext appCtx){
         this.appCtx = appCtx;
+        for(Question q : questions){
+        	((BaseQuestionImpl)q).setApplicationContext(appCtx);
+        }
     }
 
     public void appendQuestion(Question question){

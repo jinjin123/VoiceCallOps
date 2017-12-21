@@ -7,6 +7,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.saicmotor.ops.wwx.dialog.conversations.BaseConversationImpl;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -48,6 +50,7 @@ public class ConversationMnger implements ApplicationContextAware {
             for(Conversation cv : conversations){
                 if ( cv.isFire(answer) ){
                     curConversation = cv.getClass().newInstance();
+                    ((BaseConversationImpl)curConversation).setApplicationContext(appCtx);
                     cache.put(openId, curConversation);
                     return curConversation.getQuestion();
                 }
