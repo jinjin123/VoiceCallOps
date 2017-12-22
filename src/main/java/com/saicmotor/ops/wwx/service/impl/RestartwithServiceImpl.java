@@ -10,19 +10,25 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import freemarker.template.Template;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import java.io.StringWriter;
 
 import java.util.*;
 
 @Service
 public class RestartwithServiceImpl implements RestartwithService {
     private static Logger log = LoggerFactory.getLogger(RestartwithServiceImpl.class);
-
+    @Value("${yunwei.getserverservice.url}")
+    private String ygetserverserviceUrl ;
     @Autowired
     private HttpHelper restUtil;
-
-    public Map<java.lang.String, Object> restartconfirm(String url,String ip) throws Exception {
+    @Autowired
+    private FreeMarkerConfigurer freemarker;
+    
+    public Map<java.lang.String, Object> restartconfirm(String ip) throws Exception {
         try{
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
+            Map<String,Object> resulttmp = restUtil.getJsonCustom(String.format(ygetserverserviceUrl,ip));
             //return list
             List<Map> resultList = refactor( (List)((Map)resulttmp.get("body")).get("data") );
             Map<String,Object> resultMap = new HashMap<String,Object>();
@@ -37,6 +43,11 @@ public class RestartwithServiceImpl implements RestartwithService {
             result.put("data",alarms);
             result.put("ip",ip);
             log.info("result{}", result);
+            Template tpl = freemarker.getConfiguration().getTemplate((String) result.get("msgFtl"));
+            StringWriter out = new StringWriter();
+
+            tpl.process(result, out);
+            result.put("msgResult", out.toString());
             return result;
         }catch(Exception e){
             log.error(e.getMessage(), e);

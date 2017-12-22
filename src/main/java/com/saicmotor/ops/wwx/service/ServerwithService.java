@@ -6,5 +6,8 @@ import java.util.Map;
  * Created by Jimmy on 2017/12/16.
  */
 public interface  ServerwithService {
-    Map<String,Object> getService(String url,String ip) throws Exception;
+	/**
+	 *  select server from the  production  service
+	 */
+	 Map<String,Object> getService(String ip) throws Exception;
 }

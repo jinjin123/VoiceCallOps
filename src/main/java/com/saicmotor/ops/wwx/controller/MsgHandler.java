@@ -37,8 +37,7 @@ import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Random;
 import java.util.*;
-//import org.json.simple.parser.JSONParser;
-//import org.json.simple.JSONObject;
+
 
 
 /**
@@ -185,28 +184,6 @@ public class MsgHandler {
     }
 
     private ResponseEntity<byte[]> processTextMsg(Map<String,Object> msg) throws Exception{
-        String regex = "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\."
-                + "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\."
-                + "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\."
-                + "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
-
-        String regex2="^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|"
-                + "(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|"
-                + "(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|"
-                + "(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|"
-                + "(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|"
-                + "(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|"
-                + "(([0-9A-Fa-f]{1,4}:){6}((\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))"
-                + "\\b)\\.){3}(\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|"
-                + "(\\d{1,2}))\\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\\b((25[0-5])|"
-                + "(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b)\\.){3}(\\b((25[0-5])|"
-                + "(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b))|"
-                + "(::([0-9A-Fa-f]{1,4}:){0,5}((\\b((25[0-5])|"
-                + "(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b)\\.){3}(\\b((25[0-5])|"
-                + "(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b))|"
-                + "([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|"
-                + "(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|"
-                + "(([0-9A-Fa-f]{1,4}:){1,7}:))$";
         String content = (String)msg.get("Content");
         Map<String,Object> answer = tuLingService.getTalkAnswer((String)msg.get("FromUserName"), content, null);
         log.info("Q: {} \n A:{}", content, answer.get("text"));
@@ -216,58 +193,7 @@ public class MsgHandler {
             if ( tmp!=null && !tmp.startsWith("ACT.") ){
                 tmp = cm.talk((String)msg.get("FromUserName"), tmp);
                 log.info("what's question?:",tmp);
-                //filter others Q
-                if(tmp.contains("|")|| tmp.contains(",")) {
-//                    String[] tag = tmp.split("\\|");
-                    String[] tag = tmp.contains("|")?tmp.split("\\|"):tmp.split(",");
-                    if (tag[1].matches(regex) || tag[1].matches(regex2)) {
-                        if ("user".equals(tag[0])) {
-                            Map<String, Object> result = getServer.getService(String.format(ygetserverserviceUrl, tag[1]), tag[1]);
-                            log.info("username{}", result);
-                            if (result.containsKey("msgFtl")) {
-                                Template tpl = freemarker.getConfiguration().getTemplate((String) result.get("msgFtl"));
-                                StringWriter out = new StringWriter();
-                                // template render return result to output
-                                tpl.process(result, out);
-                                result.put("msgResult", out.toString());
-                                answer.put("text", result.get("msgResult"));
-                            }
-                        } else if("confirm".equals(tag[0])) {
-                            log.info("restart confirm {}", tag);
-                            Map<String, Object> result = gorestart.restartconfirm(String.format(ygetserverserviceUrl, tag[1]), tag[1]);
-                            log.info("xxxx{}", result);
-                            if (result.containsKey("msgFtl")) {
-                                Template tpl = freemarker.getConfiguration().getTemplate((String) result.get("msgFtl"));
-                                StringWriter out = new StringWriter();
-                                // template render return result to output
-                                tpl.process(result, out);
-                                result.put("msgResult", out.toString());
-                                answer.put("text", result.get("msgResult"));
-                            }
-                        }else if ("是".equals(tag[0])) {
-                            //restart confirm  YES and exec restart opeation
-                            Map<String, Object> result = execrestart.restartServer(String.format(yexecserverUrl, tag[1], tag[2], tag[3], msg.get("FromUserName")));
-                            log.info("args:{}", String.format(tag[1], tag[2], tag[3]));
-                            answer.put("text", "正在重启,请稍后...回复'结果'将返回结果");
-                        }else if("result".equals(tag[0])){
-                            // get the server result
-                                String url = String.format(ychecknetUrl, "ping -c 3 " + tag[1]);
-                                url = url.replaceAll(" ","%20");
-                                Map<String,Object> result = checknet.checkserver(url);
-                                answer.put("text", ((Map)result.get("status")).get("content"));
-                        }else if("opt".equals(tag[0])){
-                            String url = String.format(ycommandUrl, tag[1], tag[2], tag[3],tag[4]);
-                            url = url.replaceAll(" ","%20");
-                            Map<String, Object> result = gocommand.execcommand(url);
-                            answer.put("text",((Map)result.get("body")).get("content"));
-                        }
-                    }
-                }else{
-                    log.info("return tuling or not match:{}", tmp);
-                    // return talk session  match content
-                    answer.put("text", tmp);
-//                    answer.put("text", "臣没有听清楚，请陛下再说一遍");
-                }
+                answer.put("text", tmp);
             }
         }catch (Throwable t){
             log.error(t.getMessage(), t);
@@ -306,11 +232,6 @@ public class MsgHandler {
                     result.put("msgResult", out.toString());
                     answer.put("text", result.get("msgResult"));
                 }
-            }else if(content.matches("(.*)ping(.*)")){
-                String url = String.format(ychecknetUrl, content);
-                url = url.replaceAll(" ","%20");
-                Map<String,Object> result = checknet.checkserver(url);
-                answer.put("text", ((Map)result.get("status")).get("content"));
             }else if(content.matches("(.*)你能做什么(.*)")){
                 answer.put("text", "您可以输入以下文字或语音命令：\n" +
                         "1.查询告警；\n" +
@@ -320,7 +241,7 @@ public class MsgHandler {
                         "5.操作服务器;(例如如下命令:df -h,free -m,ping -c 4 ip,tail -5 /var/log/messages;禁止echo,reboot等不允许的操作,操作前请确认文件是否存在!)\n " +
                         "6.检查网络；(例如如下命令:ping -c 4 ip;) \n" +
                         "7.请勿执行长时间运行无法停止的命令;(例如如下命令:ping ip,top,tail -f ) \n " +
-                        "注意!<结束会话时,或者中断会话时,请文字或者语音回复'取消'>");
+                        "注意!<不可执行超过4秒才返回的命令，结束会话时,或者中断会话时,请文字或者语音回复'取消'>");
             }else if(content.matches("取消(.*)")){
                 answer.put("text", "已取消该次会话!");
             }else{

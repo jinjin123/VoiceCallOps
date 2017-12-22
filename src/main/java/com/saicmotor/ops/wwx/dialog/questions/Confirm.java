@@ -3,12 +3,9 @@ package com.saicmotor.ops.wwx.dialog.questions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.saicmotor.ops.wwx.utils.HttpHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saicmotor.ops.wwx.service.RestartwithService;
 
 import java.util.*;
 
@@ -16,11 +13,6 @@ public class Confirm extends BaseQuestionImpl  {
 
     private static Logger log = LoggerFactory.getLogger(Confirm.class);
     private int[] idx;
-    @Value("${yunwei.test.url}")
-    private String ytestUrl ;
-
-    @Autowired
-    private HttpHelper restUtil;
 
 
     public Confirm(String qtext, String data, int... idxs) {
@@ -38,7 +30,15 @@ public class Confirm extends BaseQuestionImpl  {
 
     @Override
     public  String getQuestion() {
-            return String.format("confirm|%s",this.conversation.getDataById(idx[0]));
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			result.put("test",this.appCtx.getBean(RestartwithService.class).restartconfirm(this.conversation.getDataById(idx[0]).toString()));
+			log.info("ip match service {}",  this.conversation.getDataById(idx[0]));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	    return String.format("%s",  ((Map)result.get("test")).get("msgResult"));
+//            return String.format("confirm|%s",this.conversation.getDataById(idx[0]));
     }
 
 }

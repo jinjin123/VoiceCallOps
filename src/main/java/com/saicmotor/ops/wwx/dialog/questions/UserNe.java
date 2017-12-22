@@ -4,10 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.saicmotor.ops.wwx.utils.HttpHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saicmotor.ops.wwx.service.ServerwithService;
 
 
 import java.util.*;
@@ -16,10 +14,6 @@ public class UserNe extends BaseQuestionImpl  {
 
     private static Logger log = LoggerFactory.getLogger(UserNe.class);
     private int[] idx;
-
-
-    @Autowired
-    private HttpHelper restUtil;
 
 
     public UserNe(String qtext, String data, int... idxs) {
@@ -37,7 +31,15 @@ public class UserNe extends BaseQuestionImpl  {
 
     @Override
     public  String getQuestion() {
-            // return A: ip address  || add tag input user or restart confirm
-            return String.format("user|%s",this.conversation.getDataById(idx[0]));
+    	// get the template  convert out to String 
+    			Map<String,Object> result = new HashMap<String,Object>();
+    			try {
+    				result.put("test",this.appCtx.getBean(ServerwithService.class).getService(this.conversation.getDataById(idx[0]).toString()));
+	    			log.info("ip match service {}",  this.conversation.getDataById(idx[0]));
+	    		}catch(Exception e) {
+    				e.printStackTrace();
+    			}
+            return String.format("%s",  ((Map)result.get("test")).get("msgResult"));
+//            return String.format("%s",this.conversation.getDataById(idx[0]));
     }
 }

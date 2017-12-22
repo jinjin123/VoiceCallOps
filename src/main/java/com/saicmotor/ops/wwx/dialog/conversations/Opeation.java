@@ -7,6 +7,8 @@ import com.saicmotor.ops.wwx.dialog.questions.HostIP;
 import com.saicmotor.ops.wwx.dialog.questions.UserNe;
 import com.saicmotor.ops.wwx.dialog.questions.UserPwd;
 import com.saicmotor.ops.wwx.dialog.questions.command;
+import com.saicmotor.ops.wwx.service.CommandService;
+import java.util.*;
 
 public class Opeation extends BaseConversationImpl {
     private static Logger log = LoggerFactory.getLogger(Opeation.class);
@@ -19,14 +21,19 @@ public class Opeation extends BaseConversationImpl {
         this.appendQuestion(new UserNe("getipwithservice","xx",0,1));
         this.appendQuestion(new UserPwd());
         this.appendQuestion(new command("请输入正确的操作指令"));
-//        this.appendQuestion(new Confirm("confirmwithservice","xx",0,1));
-        //get the which Q match the A
-//        this.appendQuestion(new ConfirmDone("ConfirmDoneserver","xx",0,1,2,3));
-//        this.appendQuestion(new result("result","xx",0));
+
     }
 
 //   Done with result action
     public String buildAction() {
-        return String.format("opt,%1$s,%2$s,%3$s,%4$s", getDatas());
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			String[] args = String.format("%1$s,%2$s,%3$s,%4$s",getDatas()).split(",");
+			result.put("test", this.appCtx.getBean(CommandService.class).execcommand(args[0],args[1],args[2],args[3]));
+			log.info("{}",((Map)result.get("test")).get("cmd_status"));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return String.format("%s",((Map)result.get("test")).get("cmd_status"));
     }
 }

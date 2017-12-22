@@ -2,6 +2,8 @@ package com.saicmotor.ops.wwx.dialog.questions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.saicmotor.ops.wwx.service.RebootService;
+import java.util.*;
 
 public class ConfirmDone extends BaseQuestionImpl{
     private static Logger log = LoggerFactory.getLogger(ConfirmDone.class);
@@ -21,7 +23,14 @@ public class ConfirmDone extends BaseQuestionImpl{
 
     @Override
     public  String getQuestion() {
-            log.info("done{}",String.format("%s|%s|%s|%s",this.conversation.getDataById(idx[3]),this.conversation.getDataById(idx[0]),this.conversation.getDataById(idx[1]),this.conversation.getDataById(idx[2])));
-            return String.format("%s|%s|%s|%s",this.conversation.getDataById(idx[3]),this.conversation.getDataById(idx[0]),this.conversation.getDataById(idx[1]),this.conversation.getDataById(idx[2]));
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+				result.put("test",this.appCtx.getBean(RebootService.class).restartServer(this.conversation.getDataById(idx[0]).toString(),this.conversation.getDataById(idx[1]).toString(),this.conversation.getDataById(idx[2]).toString()));
+				log.info("ip match service {}",  this.conversation.getDataById(idx[0]));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return String.format("%s",  "正在重启,请稍后...回复'结果'将返回结果");
+//            log.info("done{}",String.format("%s|%s|%s|%s",this.conversation.getDataById(idx[3]),this.conversation.getDataById(idx[0]),this.conversation.getDataById(idx[1]),this.conversation.getDataById(idx[2])));
     }
 }

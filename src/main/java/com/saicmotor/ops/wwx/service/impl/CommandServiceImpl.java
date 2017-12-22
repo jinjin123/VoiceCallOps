@@ -19,11 +19,19 @@ public class CommandServiceImpl implements CommandService {
 
     @Autowired
     private HttpHelper restUtil;
+    @Value("${yunwei.command.url}")
+    private String ycommandUrl;
+    
 
-    public Map<java.lang.String, Object> execcommand(String url) throws Exception {
+    public Map<java.lang.String, Object> execcommand(String ip,String user,String pwd, String cmd) throws Exception {
+//  public Map<java.lang.String, Object> execcommand(String url) throws Exception {
         try{
+        		String url =  String.format(ycommandUrl,ip,user,pwd,cmd);
+        		url = url.replaceAll(" ","%20");
             Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
-            return resulttmp;
+            Map<String,Object> result =  new HashMap<String,Object>();
+            result.put("cmd_status", ((Map)resulttmp.get("body")).get("content"));
+            return result;
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;

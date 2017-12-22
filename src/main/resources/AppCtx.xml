@@ -79,6 +79,7 @@
             <set>
                 <bean class="com.saicmotor.ops.wwx.dialog.conversations.RebootVM"/>
                 <bean class="com.saicmotor.ops.wwx.dialog.conversations.Opeation"/>
+                <bean class="com.saicmotor.ops.wwx.dialog.conversations.CheckNetItem"/>
             </set>
         </property>
     </bean>

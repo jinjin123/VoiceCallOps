@@ -10,19 +10,24 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
+import freemarker.template.Template;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import java.io.StringWriter;
 import java.util.*;
 
 @Service
 public class ServerwithServiceImpl implements ServerwithService {
     private static Logger log = LoggerFactory.getLogger(ServerwithServiceImpl.class);
-
+    @Value("${yunwei.getserverservice.url}")
+    private String ygetserverserviceUrl ;
     @Autowired
     private HttpHelper restUtil;
+    @Autowired
+    private FreeMarkerConfigurer freemarker;
 
-    public Map<java.lang.String, Object> getService(String url,String ip) throws Exception {
+    public Map<java.lang.String, Object> getService(String ip) throws Exception {
         try{
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
+            Map<String,Object> resulttmp = restUtil.getJsonCustom(String.format(ygetserverserviceUrl,ip));
             if(((Map) resulttmp.get("body")).containsKey("data")) {
                 //return list
                 List<Map> resultList = refactor((List) ((Map) resulttmp.get("body")).get("data"));
@@ -38,6 +43,11 @@ public class ServerwithServiceImpl implements ServerwithService {
                 result.put("data", alarms);
                 result.put("ip", ip);
                 log.info("result{}", result);
+                Template tpl = freemarker.getConfiguration().getTemplate((String) result.get("msgFtl"));
+                StringWriter out = new StringWriter();
+
+                tpl.process(result, out);
+                result.put("msgResult", out.toString());
                 return result;
             }else{
                 Object Msg = ((Map) resulttmp.get("body")).get("msg");
@@ -45,6 +55,11 @@ public class ServerwithServiceImpl implements ServerwithService {
                 result.put("msgType", "text");
                 result.put("msgFtl", "error/msg.ftl");
                 result.put("data", Msg);
+                Template tpl = freemarker.getConfiguration().getTemplate((String) result.get("msgFtl"));
+                StringWriter out = new StringWriter();
+
+                tpl.process(result, out);
+                result.put("msgResult", out.toString());
                 return result;
             }
         }catch(Exception e){

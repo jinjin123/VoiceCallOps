@@ -6,7 +6,8 @@ import com.saicmotor.ops.wwx.dialog.questions.UserNe;
 import com.saicmotor.ops.wwx.dialog.questions.UserPwd;
 import com.saicmotor.ops.wwx.dialog.questions.Confirm;
 import com.saicmotor.ops.wwx.dialog.questions.ConfirmDone;
-//import com.saicmotor.ops.wwx.dialog.questions.result;
+import com.saicmotor.ops.wwx.service.ChecknetService;
+import java.util.*;
 
 public class RebootVM extends BaseConversationImpl {
 
@@ -19,11 +20,17 @@ public class RebootVM extends BaseConversationImpl {
         this.appendQuestion(new Confirm("confirmwithservice","xx",0,1));
         //get the which Q match the A
         this.appendQuestion(new ConfirmDone("ConfirmDoneserver","xx",0,1,2,3));
-//        this.appendQuestion(new result("result","xx",0));
     }
 
-//   Done with result action
     public String buildAction() {
-        return String.format("result|%1$s", getDatas());
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			String[] args = String.format("%1$s,%2$s,%3$s,%4$s",getDatas()).split(",");
+			result.put("test", this.appCtx.getBean(ChecknetService.class).checkserver(args[0]));
+			log.info("{}",((Map)result.get("test")).get("cmd_status"));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return String.format("%s",((Map)result.get("test")).get("cmd_status"));
     }
 }
