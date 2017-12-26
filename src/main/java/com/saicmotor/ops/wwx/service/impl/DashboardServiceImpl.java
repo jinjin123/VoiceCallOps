@@ -164,8 +164,8 @@ public class DashboardServiceImpl implements DashboardService {
 			seriesReturnMap.put("name",  (String)seriesData.get("name"));
 			seriesReturnMap.put("export_line_name", (String)seriesMap.get("export_line_name") );
 			seriesList.add(seriesReturnMap);
-			log.info("datamap {}", seriesReturnMap);
-			log.info("dataList {}", seriesList);
+//			log.info("datamap {}", seriesReturnMap);
+//			log.info("dataList {}", seriesList);
 		}
 		for(String xTime: (List<String>)seriesMap.get("x_time")) {
 			xTimeList.add(xTime);
