@@ -162,6 +162,7 @@ public class DashboardServiceImpl implements DashboardService {
 			seriesReturnMap.put("data", dataList);
 			seriesReturnMap.put("unit",(String)seriesData.get("unit"));
 			seriesReturnMap.put("name",  (String)seriesData.get("name"));
+			seriesReturnMap.put("export_line_name", (String)seriesMap.get("export_line_name") );
 			seriesList.add(seriesReturnMap);
 			log.info("datamap {}", seriesReturnMap);
 			log.info("dataList {}", seriesList);
@@ -169,10 +170,10 @@ public class DashboardServiceImpl implements DashboardService {
 		for(String xTime: (List<String>)seriesMap.get("x_time")) {
 			xTimeList.add(xTime);
 		}
-		LineNameList.add((String)seriesMap.get("export_line_name"));
+//		LineNameList.add((String)seriesMap.get("export_line_name"));
 	}
 	lineChartMap.put("x_time", xTimeList);
-	lineChartMap.put("export_line_name", LineNameList);
+//	lineChartMap.put("export_line_name", LineNameList);
 	lineChartMap.put("series", seriesList);
 	return lineChartMap;
     }
