@@ -31,6 +31,9 @@ public class DashboardServiceImpl implements DashboardService {
     private String yDashboardTenantTopPieUrl ;
     @Value("${yunwei.dashboardKeyTenantInfo.url}")
     private String yDashboardKeyTenantInfoUrl ;
+    @Value("${yunwei.dashboardgetIdcLineInfo.url}")
+    private String yDashboardgetIdcLineInfoUrl ;
+
 
     @Autowired
     private HttpHelper restUtil;
@@ -62,7 +65,6 @@ public class DashboardServiceImpl implements DashboardService {
     }
     
     public Map<String,Object> getServerPie() throws Exception {
-    	
         String url = this.yDashboardServerPieUrl;
         Map<String,Object> result = restUtil.getJson(url);
         List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
@@ -72,7 +74,6 @@ public class DashboardServiceImpl implements DashboardService {
     }
     
     public Map<String,Object> getNetdevicesPie() throws Exception {
-    	
         String url = this.yDashboardNetdevicesPieUrl;
         Map<String,Object> result = restUtil.getJson(url);
         List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
@@ -82,7 +83,6 @@ public class DashboardServiceImpl implements DashboardService {
     }
     
     public Map<String,Object> getTenantTopPie() throws Exception {
-    	
         String url = this.yDashboardTenantTopPieUrl;
         Map<String,Object> result = restUtil.getJson(url);
         List<Map> resultList = refactorTopPie( (List)((Map)result.get("body")).get("data") );
@@ -99,6 +99,17 @@ public class DashboardServiceImpl implements DashboardService {
         Map<String,Object> resultMap = new HashMap<String,Object>();
         resultMap.put("resultList", resultList);
         return resultMap;
+    }
+    
+    public Map<String,Object> getIdcLineInfo() throws Exception {
+        String url = this.yDashboardgetIdcLineInfoUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+//        log.info("idc {}",(List)((Map)result.get("body")).get("data") );
+        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", lineChartMap);
+//        return resultMap;
+        return lineChartMap;
     }
     
     private List<Map> refactor(List<Map> data) throws Exception{
@@ -134,6 +145,39 @@ public class DashboardServiceImpl implements DashboardService {
         }
         return resultList;
     }
+    
+    private Map refactorIdcLineChart(List<Map> data) throws Exception{
+    	Map lineChartMap = new HashMap();
+    	List<Map> seriesList = new ArrayList();
+    	List<String> xTimeList = new ArrayList(); 
+    	List<String> LineNameList = new ArrayList(); 
+//    	List<String> flowTypeList = new ArrayList();
+	for(Map seriesMap: (List<Map>)data) {
+		for(Map seriesData : (List<Map>)seriesMap.get("series")) {
+			Map seriesReturnMap = new HashMap();
+			List dataList = new ArrayList();
+			for(Object value:(List<Map>)seriesData.get("data")) {
+				dataList.add(value);
+			}
+			seriesReturnMap.put("data", dataList);
+			seriesReturnMap.put("unit",(String)seriesData.get("unit"));
+			seriesReturnMap.put("name",  (String)seriesData.get("name"));
+			seriesList.add(seriesReturnMap);
+			log.info("datamap {}", seriesReturnMap);
+			log.info("dataList {}", seriesList);
+		}
+		for(String xTime: (List<String>)seriesMap.get("x_time")) {
+			xTimeList.add(xTime);
+		}
+		LineNameList.add((String)seriesMap.get("export_line_name"));
+	}
+	lineChartMap.put("x_time", xTimeList);
+	lineChartMap.put("export_line_name", LineNameList);
+	lineChartMap.put("series", seriesList);
+	return lineChartMap;
+    }
+    
+
     
     private Map refactorLineChart(Map data) throws Exception{
     	Map lineChartMap = new HashMap();
