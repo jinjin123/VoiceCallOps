@@ -49,5 +49,12 @@ public interface DashboardService {
 	 * @throws Exception
 	 */
 	Map<String,Object> getKeyTenantInfo() throws Exception;
+	
+	/**
+	 * IDC network line
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getIdcLineInfo() throws Exception;
 }
 
