@@ -28,7 +28,7 @@ public class RestartwithServiceImpl implements RestartwithService {
     
     public Map<java.lang.String, Object> restartconfirm(String ip) throws Exception {
         try{
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(String.format(ygetserverserviceUrl,ip));
+            Map<String,Object> resulttmp = restUtil.getJson(String.format(ygetserverserviceUrl,ip));
             //return list
             List<Map> resultList = refactor( (List)((Map)resulttmp.get("body")).get("data") );
             Map<String,Object> resultMap = new HashMap<String,Object>();

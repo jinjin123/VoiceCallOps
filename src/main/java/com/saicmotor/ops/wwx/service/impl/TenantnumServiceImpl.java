@@ -26,7 +26,7 @@ public class TenantnumServiceImpl implements TenantnumService {
     public Map<java.lang.String, Object> gettenantnum(String length) throws Exception {
         String url = this.ytenantnumUrl;
         try{
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
+            Map<String,Object> resulttmp = restUtil.getJson(url);
             Map<String,Object> result = new HashMap<String,Object>();
             result.put("result",((Map)resulttmp.get("body")).get("total"));
             return result;
@@ -36,15 +36,4 @@ public class TenantnumServiceImpl implements TenantnumService {
         }
     }
 
-//    //  ioop list put into map
-//    private List<Map> refactor(List<Map> data) throws Exception{
-//        List<Map> resultList = new ArrayList<Map>();
-//        for (Map map : data) {
-//            Map<String,Object> tmp = new HashMap<String,Object>();
-//            tmp.put("name", (String)map.get("name"));
-//            tmp.put("value", (String)map.get("value"));
-//            resultList.add(tmp);
-//        }
-//        return resultList;
-//    }
 }
