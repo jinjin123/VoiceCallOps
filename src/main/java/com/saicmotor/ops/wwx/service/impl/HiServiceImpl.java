@@ -28,9 +28,9 @@ public class HiServiceImpl implements HiService {
     public Map<java.lang.String, Object> getHianswer(String url, String user) throws Exception {
 
         try{
-            Map usertmp = restUtil.getJsonCustom(String.format(ywechatnameUrl,user));
+            Map usertmp = restUtil.getJson(String.format(ywechatnameUrl,user));
             Object wechatname = ((Map)usertmp.get("body")).get("name");
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
+            Map<String,Object> resulttmp = restUtil.getJson(url);
             //return list
             List<Map> resultList = refactor( (List)((Map)resulttmp.get("body")).get("data") );
             Map<String,Object> resultMap = new HashMap<String,Object>();

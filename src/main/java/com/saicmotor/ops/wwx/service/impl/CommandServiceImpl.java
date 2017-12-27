@@ -28,7 +28,7 @@ public class CommandServiceImpl implements CommandService {
         try{
         		String url =  String.format(ycommandUrl,ip,user,pwd,cmd);
         		url = url.replaceAll(" ","%20");
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
+            Map<String,Object> resulttmp = restUtil.getJson(url);
             Map<String,Object> result =  new HashMap<String,Object>();
             result.put("cmd_status", ((Map)resulttmp.get("body")).get("content"));
             return result;

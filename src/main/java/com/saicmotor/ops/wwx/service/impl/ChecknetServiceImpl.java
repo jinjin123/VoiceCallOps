@@ -30,7 +30,7 @@ public class ChecknetServiceImpl implements ChecknetService {
         try{
         		String url = String.format(ychecknetUrl,"ping -c 3 " + ip);
         		url = url.replaceAll(" ","%20");
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
+            Map<String,Object> resulttmp = restUtil.getJson(url);
             Map<String,Object> resultMap = new HashMap<String,Object>();
             resultMap.put("cmd_status",((Map)resulttmp.get("body")).get("content"));
             return resultMap;
@@ -45,7 +45,7 @@ public class ChecknetServiceImpl implements ChecknetService {
         		
         		String url = String.format(checknetitemUrl,ip,item);
 //        		url = url.replaceAll(" ","%20");
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(url);
+            Map<String,Object> resulttmp = restUtil.getJson(url);
             Map<String,Object> resultMap = new HashMap<String,Object>();
             resultMap.put("cmd_status",((Map)resulttmp.get("body")).get("content"));
             return resultMap;

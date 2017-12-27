@@ -27,7 +27,7 @@ public class ServerwithServiceImpl implements ServerwithService {
 
     public Map<java.lang.String, Object> getService(String ip) throws Exception {
         try{
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(String.format(ygetserverserviceUrl,ip));
+            Map<String,Object> resulttmp = restUtil.getJson(String.format(ygetserverserviceUrl,ip));
             if(((Map) resulttmp.get("body")).containsKey("data")) {
                 //return list
                 List<Map> resultList = refactor((List) ((Map) resulttmp.get("body")).get("data"));

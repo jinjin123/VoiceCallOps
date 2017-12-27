@@ -26,7 +26,7 @@ public class RebootServiceImpl implements RebootService {
     public Map<java.lang.String, Object> restartServer(String ip,String user,String pwd) throws Exception {
         try{
         	
-            Map<String,Object> resulttmp = restUtil.getJsonCustom(String.format(yexecserverUrl,ip,user,pwd));
+            Map<String,Object> resulttmp = restUtil.getJson(String.format(yexecserverUrl,ip,user,pwd));
             
             return resulttmp;
         }catch(Exception e){
