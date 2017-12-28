@@ -104,7 +104,7 @@ public class DashboardServiceImpl implements DashboardService {
     public Map<String,Object> getIdcLineInfo() throws Exception {
         String url = this.yDashboardgetIdcLineInfoUrl;
         Map<String,Object> result = restUtil.getJson(url);
-//        log.info("idc {}",(List)((Map)result.get("body")).get("data") );
+//        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
         Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
         Map<String,Object> resultMap = new HashMap<String,Object>();
         resultMap.put("resultList", lineChartMap);
@@ -148,33 +148,31 @@ public class DashboardServiceImpl implements DashboardService {
     
     private Map refactorIdcLineChart(List<Map> data) throws Exception{
     	Map lineChartMap = new HashMap();
-    	List<Map> seriesList = new ArrayList();
-    	List<String> xTimeList = new ArrayList(); 
-    	List<String> LineNameList = new ArrayList(); 
-//    	List<String> flowTypeList = new ArrayList();
+    	List<Map> BigDataList = new ArrayList();
 	for(Map seriesMap: (List<Map>)data) {
+		Map dataReturnMap = new HashMap();
+		List<String> xTimeList = new ArrayList(); 
+		List seriesList = new ArrayList();
 		for(Map seriesData : (List<Map>)seriesMap.get("series")) {
 			Map seriesReturnMap = new HashMap();
 			List dataList = new ArrayList();
 			for(Object value:(List<Map>)seriesData.get("data")) {
 				dataList.add(value);
 			}
-			seriesReturnMap.put("data", dataList);
+			seriesReturnMap.put("data",dataList);
 			seriesReturnMap.put("unit",(String)seriesData.get("unit"));
 			seriesReturnMap.put("name",  (String)seriesData.get("name"));
-			seriesReturnMap.put("export_line_name", (String)seriesMap.get("export_line_name") );
 			seriesList.add(seriesReturnMap);
-//			log.info("datamap {}", seriesReturnMap);
-//			log.info("dataList {}", seriesList);
 		}
+		dataReturnMap.put("series",seriesList );
+		dataReturnMap.put("export_line_name", (String)seriesMap.get("export_line_name") );
 		for(String xTime: (List<String>)seriesMap.get("x_time")) {
 			xTimeList.add(xTime);
 		}
-//		LineNameList.add((String)seriesMap.get("export_line_name"));
+		dataReturnMap.put("x_time",xTimeList );
+		BigDataList.add(dataReturnMap);
 	}
-	lineChartMap.put("x_time", xTimeList);
-//	lineChartMap.put("export_line_name", LineNameList);
-	lineChartMap.put("series", seriesList);
+	lineChartMap.put("data", BigDataList);
 	return lineChartMap;
     }
     
