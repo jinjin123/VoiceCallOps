@@ -59,6 +59,19 @@ public class BaiduYuYinServiceImpl implements BaiduYuYinService{
     private String baidu_api_callback;
     @Value("${baidu.api.url}")
     private String baidu_api_url;
+    
+    @Value("${baidu.token.grant_type}")
+    private String baidu_token_grant_type;
+    @Value("${baidu.api.key}")
+    private String baidu_api_key;
+    @Value("${baidu.api.secretKey}")
+    private String baidu_api_secretKey;
+    @Value("${baidu.token.url}")
+    private String baidu_token_url;
+    
+    //simple reuse baidu access token
+    private String baiduAccessToken ;
+    private long baiduAccessTokenExpires;
 
     public String voice2txt(String format, String rate, byte[] data) throws Exception{
         try{
@@ -67,7 +80,7 @@ public class BaiduYuYinServiceImpl implements BaiduYuYinService{
             body.put("rate", rate);
             body.put("channel", baidu_api_channel);
             body.put("cuid", baidu_api_cuid);
-            body.put("token", baidu_api_token);
+            body.put("token", getAccessToken());
             body.put("lan", baidu_api_lan);
             body.put("len", data.length);
             body.put("speech", DatatypeConverter.printBase64Binary(data));
@@ -121,7 +134,7 @@ public class BaiduYuYinServiceImpl implements BaiduYuYinService{
           body.put("rate", baidu_api_rate);
           body.put("channel", baidu_api_channel);
           body.put("cuid", baidu_api_cuid);
-          body.put("token", baidu_api_token);
+          body.put("token", getAccessToken());
           body.put("lan", baidu_api_lan);
           body.put("len", mediaFile.length());
           body.put("speech", DatatypeConverter.printBase64Binary(loadFile(mediaFile)));
@@ -156,5 +169,30 @@ public class BaiduYuYinServiceImpl implements BaiduYuYinService{
 
         is.close();
         return bytes;
+    }
+    
+    public synchronized String getAccessToken() throws Exception {
+        try{
+            if( baiduAccessToken!=null && System.currentTimeMillis()<baiduAccessTokenExpires ){
+                log.debug("reuse cached token : {}", baiduAccessToken);
+                return baiduAccessToken;
+            }
+
+            Map<String,Object> uriVariables = new HashMap<String, Object>();
+            uriVariables.put("grant_type", baidu_token_grant_type);
+            uriVariables.put("client_id", baidu_api_key);
+            uriVariables.put("client_secret", baidu_api_secretKey);
+            Map<String,Object> data = httpHelper.getJson(baidu_token_url, uriVariables);
+
+            baiduAccessToken = (String)((Map)data.get("body")).get("access_token");
+            baiduAccessTokenExpires = System.currentTimeMillis() + (Integer)((Map)data.get("body")).get("expires_in")/2*1000;
+            log.debug("get new wwx token : {}", baiduAccessToken);
+            return baiduAccessToken;
+        }catch(Exception e){
+        	baiduAccessTokenExpires = -1;
+            baiduAccessToken = null;
+            log.error(e.getMessage(), e);
+            throw e;
+        }
     }
 }
