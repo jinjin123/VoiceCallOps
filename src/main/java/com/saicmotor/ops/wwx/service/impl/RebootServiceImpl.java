@@ -27,8 +27,10 @@ public class RebootServiceImpl implements RebootService {
         try{
         	
             Map<String,Object> resulttmp = restUtil.getJson(String.format(yexecserverUrl,ip,user,pwd));
-            
-            return resulttmp;
+            Map<String,Object> result =  new HashMap<String,Object>();
+            result.put("msg",((Map)resulttmp.get("body")).get("msg"));
+            log.info("result {}", result);
+            return result;
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;

@@ -26,11 +26,11 @@ public class ConfirmDone extends BaseQuestionImpl{
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
 				result.put("test",this.appCtx.getBean(RebootService.class).restartServer(this.conversation.getDataById(idx[0]).toString(),this.conversation.getDataById(idx[1]).toString(),this.conversation.getDataById(idx[2]).toString()));
-				log.info("ip match service {}",  this.conversation.getDataById(idx[0]));
+				log.info("reboot return {}",  ((Map)result.get("test")).get("msg"));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return String.format("%s",  "正在重启,请稍后...回复'结果'将返回结果");
+		return String.format("%s,%s",  ((Map)result.get("test")).get("msg"),"正在重启,请稍后...回复'结果'将返回结果");
 //            log.info("done{}",String.format("%s|%s|%s|%s",this.conversation.getDataById(idx[3]),this.conversation.getDataById(idx[0]),this.conversation.getDataById(idx[1]),this.conversation.getDataById(idx[2])));
     }
 }
