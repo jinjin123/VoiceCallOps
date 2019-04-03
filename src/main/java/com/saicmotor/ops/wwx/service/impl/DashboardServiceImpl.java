@@ -33,8 +33,39 @@ public class DashboardServiceImpl implements DashboardService {
     private String yDashboardKeyTenantInfoUrl ;
     @Value("${yunwei.dashboardgetIdcLineInfo.url}")
     private String yDashboardgetIdcLineInfoUrl ;
-
-
+    @Value("${yunwei.dashboardgetDtLineInfo.url}")
+    private String yDashboardgetDtLineInfoUrl ;
+    @Value("${yunwei.dashboardgetDtcputen.url}")
+    private String yDashboardgetDtcputenUrl ;
+    @Value("${yunwei.dashboardgetDtcpuelv.url}")
+    private String yDashboardgetDtcpuelvUrl ;
+    @Value("${yunwei.dashboardgetDtmemten.url}")
+    private String yDashboardgetDtmemtenUrl ;
+    @Value("${yunwei.dashboardgetDtmemelv.url}")
+    private String yDashboardgetDtmemelvUrl ;
+    @Value("${yunwei.dashboardgetDtngxses.url}")
+    private String yDashboardgetDtngxsesUrl ;
+    @Value("${yunwei.dashboardgetDtngxact.url}")
+    private String yDashboardgetDtngxactUrl ;
+    @Value("${yunwei.dashboardgetBmlvscn.url}")
+    private String yDashboardgetBmlvscnUrl;
+	@Value("${yunwei.dashboardgetBmtgone.url}")
+	private String yDashboardgetBmtgoneUrl ;
+	@Value("${yunwei.dashboardgetBmtgtwo.url}")
+	private String yDashboardgetBmtgtwoUrl ;
+	@Value("${yunwei.dashboardgetBmtgthree.url}")
+	private String yDashboardgetBmtgthreeUrl ;
+	@Value("${yunwei.dashboardgetBmtgfour.url}")
+	private String yDashboardgetBmtgfourUrl ;
+	@Value("${yunwei.dashboardgetBmngxline.url}")
+	private String yDashboardgetBmngxLineUrl ;
+	@Value("${yunwei.dashboardgetBmngxpie.url}")
+	private String yDashboardgetBmngxPieUrl ;
+    
+	@Value("${yunwei.dashboardgetpyvm.url}")
+	private String yDashboardgetpyvmUrl ;
+	@Value("${yunwei.dashboardgetpyvmdata.url}")
+	private String yDashboardgetpyvmdataUrl ;
     @Autowired
     private HttpHelper restUtil;
     
@@ -112,6 +143,185 @@ public class DashboardServiceImpl implements DashboardService {
         return lineChartMap;
     }
     
+    public Map<String,Object> getDtLineInfo() throws Exception {
+        String url = this.yDashboardgetDtLineInfoUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+//        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", lineChartMap);
+//        return resultMap;
+        return lineChartMap;
+    }
+    
+    public Map<String,Object> getDtcputenPie() throws Exception {
+        String url = this.yDashboardgetDtcputenUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", resultList);
+        return resultMap;
+    }
+    
+    public Map<String,Object> getDtcpuelvPie() throws Exception {
+        String url = this.yDashboardgetDtcpuelvUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", resultList);
+        return resultMap;
+    }
+    
+    public Map<String,Object> getDtmemtenPie() throws Exception {
+        String url = this.yDashboardgetDtmemtenUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", resultList);
+        return resultMap;
+    }
+    public Map<String,Object> getDtmemelvPie() throws Exception {
+        String url = this.yDashboardgetDtmemelvUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", resultList);
+        return resultMap;
+    }
+    public Map<String,Object> getDtngxsesPie() throws Exception {
+        String url = this.yDashboardgetDtngxsesUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", resultList);
+        return resultMap;
+    }
+    public Map<String,Object> getDtngxact() throws Exception {
+        String url = this.yDashboardgetDtngxactUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+//        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", lineChartMap);
+//        return resultMap;
+        return lineChartMap;
+    }
+    public Map<String,Object> getBmlvscon() throws Exception {
+        String url = this.yDashboardgetBmlvscnUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+//        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", lineChartMap);
+//        return resultMap;
+        return lineChartMap;
+    }
+    public Map<String,Object> getBmtgone() throws Exception {
+        String url = this.yDashboardgetBmtgoneUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+//        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", lineChartMap);
+//        return resultMap;
+        return lineChartMap;
+    }
+    public Map<String,Object> getBmtgtwo() throws Exception {
+        String url = this.yDashboardgetBmtgtwoUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+//        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", lineChartMap);
+//        return resultMap;
+        return lineChartMap;
+    }
+    public Map<String,Object> getBmtgthree() throws Exception {
+        String url = this.yDashboardgetBmtgthreeUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+//        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", lineChartMap);
+//        return resultMap;
+        return lineChartMap;
+    }
+    public Map<String,Object> getBmtgfour() throws Exception {
+        String url = this.yDashboardgetBmtgfourUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+//        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", lineChartMap);
+//        return resultMap;
+        return lineChartMap;
+    }
+    public Map<String,Object> getBmngxLine() throws Exception {
+        String url = this.yDashboardgetBmngxLineUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+//        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map lineChartMap = refactorIdcLineChart( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", lineChartMap);
+//        return resultMap;
+        return lineChartMap;
+    }
+    public Map<String,Object> getBmngxPie() throws Exception {
+        String url = this.yDashboardgetBmngxPieUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> resultList = refactorCountPie( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList", resultList);
+        return resultMap;
+    }
+
+    
+    public Map<String,Object> getpyvm() throws Exception {
+        String url = this.yDashboardgetpyvmUrl;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> resultList = refactorpyvm( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList",resultList);
+        return resultMap;
+    }
+    
+    public Map<String,Object> getpyvmdata(String hostname) throws Exception {
+        String url = this.yDashboardgetpyvmdataUrl + hostname;
+        Map<String,Object> result = restUtil.getJson(url);
+        List<Map> resultList = refactorpyvmdata( (List)((Map)result.get("body")).get("data") );
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("resultList",resultList);
+        return resultMap;
+    }
+    private List<Map> refactorpyvm(List<Map> data) throws Exception{
+        List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+            Map<String,Object> tmp = new HashMap<String,Object>();
+            tmp.put("hostname", map.get("hostname"));
+            tmp.put("ip", map.get("ip"));
+            tmp.put("etip", map.get("etip"));
+            tmp.put("wanip", map.get("wanip"));
+            tmp.put("rack", map.get("rack"));
+            tmp.put("pos", map.get("pos"));
+            tmp.put("vm_num", map.get("vm_num"));
+            resultList.add(tmp);
+        }
+        return resultList;
+    }
+    private List<Map> refactorpyvmdata(List<Map> data) throws Exception{
+        List<Map> resultList = new ArrayList<Map>();
+        for (Map map : data) {
+            Map<String,Object> tmp = new HashMap<String,Object>();
+            tmp.put("hostname", map.get("hostname"));
+            tmp.put("ip", map.get("ip"));
+            tmp.put("vm_hostname", map.get("vm_hostname"));
+            tmp.put("vmip", map.get("vmip"));
+            tmp.put("vmhd", map.get("vmhd"));
+            tmp.put("vm_num", map.get("vm_num"));
+            resultList.add(tmp);
+        }
+        return resultList;
+    }
     private List<Map> refactor(List<Map> data) throws Exception{
     	List<Map> resultList = new ArrayList<Map>();
         for (Map map : data) {

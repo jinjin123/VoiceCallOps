@@ -56,5 +56,99 @@ public interface DashboardService {
 	 * @throws Exception
 	 */
 	Map<String,Object> getIdcLineInfo() throws Exception;
+	/**
+	 * Dt network line
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getDtLineInfo() throws Exception;
+	
+	/**
+	 * Dt cpu ten data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getDtcputenPie() throws Exception;
+	
+	/**
+	 * Dt cpu elv data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getDtcpuelvPie() throws Exception;
+	
+	/**
+	 * Dt mem ten data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getDtmemtenPie() throws Exception;
+	
+	/**
+	 * Dt mem elv data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getDtmemelvPie() throws Exception;
+	
+	/**
+	 * Dt ngx sess data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getDtngxsesPie() throws Exception;
+	
+	/**
+	 * Dt ngx act data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getDtngxact() throws Exception;
+	/**
+	 * Bm lvs data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getBmlvscon() throws Exception;
+	/**
+	 * Bm tg one data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getBmtgone() throws Exception;
+	/**
+	 * Bm tg two data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getBmtgtwo() throws Exception;
+	/**
+	 * Bm tg three data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getBmtgthree() throws Exception;
+	/**
+	 * Bm tg four data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getBmtgfour() throws Exception;
+	/**
+	 * Bm ngx session Line data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getBmngxLine() throws Exception;
+	/**
+	 * Bm ngx session Pie data
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String,Object> getBmngxPie() throws Exception;
+	
+	Map<String,Object> getpyvm() throws Exception;
+	
+	Map<String,Object> getpyvmdata(String hostname) throws Exception;
 }
 

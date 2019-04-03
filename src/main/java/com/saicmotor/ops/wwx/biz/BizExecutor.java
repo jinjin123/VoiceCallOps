@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 public class BizExecutor {
     private static Logger log = LoggerFactory.getLogger(BizExecutor.class);
+//    ACT.asset.getAssetManageTenant(6LWb56eR5Yip5rG96L2m5qih5YW3,0)
     private static String cmdPattern = "^ACT\\.(\\w+)\\.(\\w+)\\(([\\w+\\s*,]*)\\)$";
 
     @Autowired

@@ -31,7 +31,6 @@ public class HttpHelper {
     @Autowired
     private CloseableHttpClient httpClient;
     @Autowired
-    @SuppressWarnings({"SpringJavaAutowiringInspection"})
     private ObjectMapper jsonMapper;
 
     private Map<String,Object> request(String method, String url,  Map<String,Object> querys, Map<String,Object> headers, Map<String,Object> body) throws Exception{

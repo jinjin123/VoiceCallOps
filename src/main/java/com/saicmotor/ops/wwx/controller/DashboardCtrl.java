@@ -122,4 +122,218 @@ public class DashboardCtrl {
             return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @RequestMapping("/getDtLineInfo")
+    public ResponseEntity<Map> getDtLineInfo(){
+        try{
+            Map getIdcLineInfoMap = dashboardService.getDtLineInfo();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getIdcLineInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @RequestMapping("/DtcputenPie")
+    public ResponseEntity<Map> getDtcputenPie(){
+        try{
+            Map netdevicesPieMap = dashboardService.getDtcputenPie();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", netdevicesPieMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/DtcpuelvPie")
+    public ResponseEntity<Map> getDtcpuelvPie(){
+        try{
+            Map netdevicesPieMap = dashboardService.getDtcpuelvPie();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", netdevicesPieMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/DtmemtenPie")
+    public ResponseEntity<Map> getDtmemtenPie(){
+        try{
+            Map netdevicesPieMap = dashboardService.getDtmemtenPie();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", netdevicesPieMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/DtmemelvPie")
+    public ResponseEntity<Map> getDtmemelvPie(){
+        try{
+            Map netdevicesPieMap = dashboardService.getDtmemelvPie();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", netdevicesPieMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/DtngxsesPie")
+    public ResponseEntity<Map> getDtngxsesPie(){
+        try{
+            Map netdevicesPieMap = dashboardService.getDtngxsesPie();
+
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", netdevicesPieMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getDtngxact")
+    public ResponseEntity<Map> getDtngxact(){
+        try{
+            Map getIdcLineInfoMap = dashboardService.getDtngxact();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getIdcLineInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getBmlvscon")
+    public ResponseEntity<Map> getBmlvscon(){
+        try{
+            Map getIdcLineInfoMap = dashboardService.getBmlvscon();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getIdcLineInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getBmtgonetcp")
+    public ResponseEntity<Map> getBmtgone(){
+        try{
+            Map getIdcLineInfoMap = dashboardService.getBmtgone();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getIdcLineInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getBmtgtwotcp")
+    public ResponseEntity<Map> getBmtgtow(){
+        try{
+            Map getIdcLineInfoMap = dashboardService.getBmtgtwo();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getIdcLineInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getBmtgthreetcp")
+    public ResponseEntity<Map> getBmtgthree(){
+        try{
+            Map getIdcLineInfoMap = dashboardService.getBmtgthree();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getIdcLineInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getBmtgfourtcp")
+    public ResponseEntity<Map> getBmtgfour(){
+        try{
+            Map getIdcLineInfoMap = dashboardService.getBmtgfour();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getIdcLineInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getBmngxLine")
+    public ResponseEntity<Map> getBmngxLine(){
+        try{
+            Map getIdcLineInfoMap = dashboardService.getBmngxLine();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getIdcLineInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getBmngxPie")
+    public ResponseEntity<Map> getBmngxPie(){
+        try{
+            Map getIdcLineInfoMap = dashboardService.getBmngxPie();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getIdcLineInfoMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getpyvm")
+    public ResponseEntity<Map> getpyvm(){
+        try{
+            Map getpyvmMap = dashboardService.getpyvm();
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getpyvmMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping("/getpyvmdata")
+    public ResponseEntity<Map> getpyvmdata(String hostname){
+        try{
+            Map getpyvmdataMap = dashboardService.getpyvmdata(hostname);
+            Map<String,Object> result = new HashMap<String,Object>();
+            result.put("success", true);
+            result.put("data", getpyvmdataMap);
+            return new ResponseEntity<Map>(result, HttpStatus.OK);
+        }catch(Throwable t){
+            log.error(t.getMessage(), t);
+            return new ResponseEntity<Map>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
